@@ -9,13 +9,13 @@
 
 
 
-pub const PAGE_SIZE: u64 = 4096;
+pub const PAGE_SIZE: usize = 4096;
 
 
 struct Page{
     page_no: u64,
-    offset : u64,                            // till where data is written
-    data: [u8; PAGE_SIZE as usize],
+    offset : usize,                            // till where data is written
+    data: [u8; PAGE_SIZE],
 }
 
 impl Page {
@@ -23,23 +23,34 @@ impl Page {
         Page {
             page_no,
             offset: 0,
-            data: [0; PAGE_SIZE as usize]
+            data: [0; PAGE_SIZE]
         }
     }
 
-    fn read_page(&self, offset: u64, read_size: u64) -> Result<Vec<u8>, String> {
-        if offset + read_size > self.offset as u64 {
-            Err("Read exceeds page size".to_string())
-        }
-        Ok(self.data[offset as usize..(offset + read_size) as usize].to_vec())
+    fn create(page_no: u64, data: [u8; PAGE_SIZE]) -> Result<Page> {
+        Ok(Page {
+            page_no,
+            offset: PAGE_SIZE, // assuming the data is filled to the end of the page -> need to change this later. 
+            data
+        })
     }
 
-    fn write_page(&mut self, data: &Vec<u8>) -> Result<(), String> {
-        if data.len() + self.offset > PAGE_SIZE as usize {
+    fn read_page(&self, offset: usize, read_size: usize) -> Result<&[u8]> {
+        if offset + read_size > self.offset {
+            return Err("Read exceeds page size".to_string());
+        }
+        Ok(&self.data[offset..(offset + read_size)])
+    }
+
+    // currently keeping it append only. Easy to handle.
+    // can change to write at specific offset later. => that will have fragmentation issues.
+
+    fn write_page(&mut self, data: &[u8]) -> Result<()> {           
+        if data.len() + self.offset > PAGE_SIZE {
             Err("Write exceeds page size".to_string())
         } else {
-            self.data[self.offset as usize..(self.offset + data.len() as u64) as usize].copy_from_slice(&data);
-            self.offset += data.len() as u64;
+            self.data[self.offset..(self.offset + data.len())].copy_from_slice(&data);
+            self.offset = self.offset + data.len();
             Ok(())
         }
     }
