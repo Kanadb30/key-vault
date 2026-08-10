@@ -27,17 +27,17 @@ impl Page {
         }
     }
 
-    fn create(page_no: u64, data: [u8; PAGE_SIZE]) -> Result<Page> {
-        Ok(Page {
+    fn create(page_no: u64, data: [u8; PAGE_SIZE]) -> Page {
+        Page {
             page_no,
             offset: PAGE_SIZE, // assuming the data is filled to the end of the page -> need to change this later. 
             data
-        })
+        }
     }
 
     fn read_page(&self, offset: usize, read_size: usize) -> Result<&[u8]> {
         if offset + read_size > self.offset {
-            return Err("Read exceeds page size".to_string());
+            return Err(CustomError::Err_from_wrong_arg("Read exceeds page size".to_string()));
         }
         Ok(&self.data[offset..(offset + read_size)])
     }
@@ -47,7 +47,7 @@ impl Page {
 
     fn write_page(&mut self, data: &[u8]) -> Result<()> {           
         if data.len() + self.offset > PAGE_SIZE {
-            Err("Write exceeds page size".to_string())
+            Err(CustomError::Err_from_wrong_arg("Write exceeds page size".to_string()))
         } else {
             self.data[self.offset..(self.offset + data.len())].copy_from_slice(&data);
             self.offset = self.offset + data.len();
