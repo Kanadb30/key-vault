@@ -2,7 +2,9 @@
 // - opening a file
 // - read a page
 // - write to a page
-
+use crate::customErrors::CustomError;
+use crate::customErrors::Result;
+use crate::page::{PAGE_SIZE, Page};
 use std::fs::{File, OpenOptions};
 use std::io::{Read, Seek, SeekFrom, Write};
 
@@ -37,7 +39,7 @@ impl DiskManager {
             let mut buffer = [0; PAGE_SIZE];
             self.file.seek(SeekFrom::Start(page_no * PAGE_SIZE as u64))?;
             self.file.read_exact(&mut buffer)?;
-            let page = Page::create(page_no, buffer);
+            let page = Page::create(buffer)?;
             Ok(page)
         }
     }
@@ -47,7 +49,7 @@ impl DiskManager {
         let buffer = [0; PAGE_SIZE];
         self.file.seek(SeekFrom::Start(page_no * PAGE_SIZE as u64))?;
         self.file.write_all(&buffer)?;
-        let page = Page::create(page_no, buffer);
+        let page = Page::create(buffer)?;
         Ok(page)
     }
 

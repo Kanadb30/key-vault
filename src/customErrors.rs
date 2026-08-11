@@ -13,5 +13,8 @@ pub enum CustomError {
 
     #[error("I/O error occurred")]
     IoError(#[from] std::io::Error),
+
+    #[error("Conversion Error Occurred")]
+    ConversionError(#[from] std::array::TryFromSliceError),
 }
 
