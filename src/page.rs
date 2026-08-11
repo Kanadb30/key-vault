@@ -6,12 +6,12 @@ pub const PAGE_SIZE: usize = 4096;
 
 pub const HEADER_WITHOUT_PAGE_NO: [u8; 4] = [0, 8, 0, 0];
 
-// Making struct fields pub for now to test will convert them again soon. 
+
 pub struct Page{
-    pub page_no: u32,
-    pub data_end: u16,                    
-    pub record_count: u16,                    
-    pub data: [u8; PAGE_SIZE],
+    page_no: u32,
+    data_end: u16,                    
+    record_count: u16,                    
+    data: [u8; PAGE_SIZE],
 }
 
 impl Page {
