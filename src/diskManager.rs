@@ -32,12 +32,12 @@ impl DiskManager {
         Ok(DiskManager { file })
     }
     // Loads whole page, creates a page object and returns it.
-    pub fn read_page(&mut self, page_no: u64) -> Result<Page> {
-        if page_no * PAGE_SIZE as u64 >= self.file.metadata()?.len() {
+    pub fn read_page(&mut self, page_no: u32) -> Result<Page> {
+        if page_no * PAGE_SIZE as u32 >= self.file.metadata()?.len() as u32 {
             return Err(CustomError::Err_from_wrong_arg("Page number exceeds file size".to_string()));
         }else{
             let mut buffer = [0; PAGE_SIZE];
-            self.file.seek(SeekFrom::Start(page_no * PAGE_SIZE as u64))?;
+            self.file.seek(SeekFrom::Start((page_no * PAGE_SIZE as u32).into()))?;
             self.file.read_exact(&mut buffer)?;
             let page = Page::create(buffer)?;
             Ok(page)
