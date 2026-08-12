@@ -6,13 +6,19 @@ pub const PAGE_SIZE: usize = 4096;
 
 pub const HEADER_WITHOUT_PAGE_NO: [u8; 4] = [0, 8, 0, 0];
 
-
-pub struct Page{
-    page_no: u32,
-    data_end: u16,                    
-    record_count: u16,                    
-    data: [u8; PAGE_SIZE],
+pub struct Page {
+    pub page_no: u32,
+    pub data_end: u16,
+    pub record_count: u16,
+    pub data: [u8; PAGE_SIZE],
 }
+
+// pub struct Page{
+//     page_no: u32,
+//     data_end: u16,                    
+//     record_count: u16,                    
+//     data: [u8; PAGE_SIZE],
+// }
 
 impl Page {
     pub fn new(page_no: u32) -> Page {
@@ -58,7 +64,7 @@ impl Page {
             return Err(CustomError::Err_from_wrong_arg("Record no. exceeds record count".to_string()));
         }
         let mut offset: usize = 8;
-        for _ in 1..record_no{
+        for _ in 0..record_no{
             offset += self.data[offset..offset + 2].try_into().map(u16::from_be_bytes)? as usize;
             offset += 2;
         }
