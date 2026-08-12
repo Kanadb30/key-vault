@@ -1,11 +1,12 @@
 use crate::page::{Page, PAGE_SIZE};
 use crate::diskManager::DiskManager;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use crate::customErrors::{CustomError, Result};
 
 pub struct BufferPool {
     dm: DiskManager,
     page_table: HashMap<u32, Page>,
+    dirty_pages: HashSet<u32>,
 }
 
 impl BufferPool {
@@ -20,6 +21,7 @@ impl BufferPool {
         Ok(BufferPool {
             dm: disk_manager,
             page_table: HashMap::new(),
+            dirty_pages: HashSet::new(),
         })
     }
 
@@ -36,7 +38,17 @@ impl BufferPool {
             let page = self.dm.read_page(page_no)?;
             self.page_table.insert(page_no, page);
         }
+        self.dirty_pages.insert(page_no);
         Ok(self.page_table.get_mut(&page_no).unwrap())
+    }
+
+    pub fn flush(&mut self) -> Result<()> {
+        for page_no in &self.dirty_pages {
+            let page = self.page_table.get(page_no).unwrap();
+            self.dm.write_page(*page_no, &page.data)?;
+        }
+        self.dirty_pages.clear();
+        Ok(())
     }
 }
 
