@@ -4,13 +4,18 @@ use std::collections::{HashMap, HashSet, VecDeque};
 use crate::customErrors::{CustomError, Result};
 
 pub const BUFFER_POOL_CAPACITY: usize = 5; // aise hi 5 set hai -> will change later to dynamic value according to system specific needs.
+
+
 // current implementation uses vec for LRU cache but will change it to HashMap<Page_no, Node> and doublyLinkedList in future implementation.
+
+
 pub struct BufferPool {
     dm: DiskManager,
     page_table: HashMap<u32, Page>,
     dirty_pages: HashSet<u32>,
     capacity: usize,
-    lru: VecDeque<u32>,
+    lru: VecDeque<u32>,       // page_no -> LRU order
+    pins: HashMap<u32, u32>, // page_no -> pin_count
 }
 
 impl BufferPool {
@@ -94,5 +99,7 @@ impl BufferPool {
         }
         Ok(())
     }
+
+    
 }
 

@@ -6,6 +6,9 @@ pub const PAGE_SIZE: usize = 4096;
 
 pub const HEADER_WITHOUT_PAGE_NO: [u8; 4] = [0, 8, 0, 0];
 
+// made everything public just for testing reasons.
+// WILL CHANGE LATER -> FOR SURE.
+
 pub struct Page {
     pub page_no: u32,
     pub data_end: u16,
