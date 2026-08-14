@@ -33,6 +33,7 @@ impl BufferPool {
             dirty_pages: HashSet::new(),
             capacity: BUFFER_POOL_CAPACITY,
             lru: VecDeque::new(),
+            pins: HashMap::new(),
         })
     }
 
@@ -40,13 +41,15 @@ impl BufferPool {
         if !self.page_table.contains_key(&page_no) {
             let page = self.dm.read_page(page_no)?;
             self.page_table.insert(page_no, page);
+            self.pin(page_no)?;
             self.lru.push_front(page_no);
-            self.check_for_flush()?;
+            self.evict()?;
             return Ok(self.page_table.get(&page_no).unwrap());
         } else{
+            self.pin(page_no)?;
             self.lru.retain(|&existing_page_no| existing_page_no != page_no);
             self.lru.push_front(page_no);
-            self.check_for_flush()?;
+            self.evict()?;
             return Ok(self.page_table.get(&page_no).unwrap());
         }
     }
@@ -57,14 +60,17 @@ impl BufferPool {
         if !self.page_table.contains_key(&page_no) {
             let page = self.dm.read_page(page_no)?;
             self.page_table.insert(page_no, page);
+            self.pin(page_no)?;
             self.dirty_pages.insert(page_no);
             self.lru.push_front(page_no);
-            self.check_for_flush()?;
+            self.evict()?;
             return Ok(self.page_table.get_mut(&page_no).unwrap());
         }else {
+            self.pin(page_no)?;
             self.dirty_pages.insert(page_no);
             self.lru.retain(|&existing_page_no| existing_page_no != page_no);
             self.lru.push_front(page_no);
+            self.evict()?;
             return Ok(self.page_table.get_mut(&page_no).unwrap());
         }
     }
@@ -83,22 +89,57 @@ impl BufferPool {
 
     // Evicts the least recently used page from the buffer -> capacity exceeded case.
 
-    fn check_for_flush(&mut self) -> Result<()> {
+    fn evict(&mut self) -> Result<()> {
         if(self.lru.len() > self.capacity) {
-            let pop_page_no = self.lru.pop_back().unwrap();
+            let mut stack = Vec::new();
+            let mut pop_page_no: u32 = 0;
+            while true {
+                if( self.lru.len() == 0) {
+                    return Err(CustomError::Err_from_wrong_arg("Buffer pool has no unpinned pages, cannot evict any page".to_string()));
+                }
+                pop_page_no = self.lru.pop_back().unwrap();
+                if self.pins.get(&pop_page_no).unwrap_or(&0) != &0{
+                    stack.push(pop_page_no);
+                } else {
+                    break;
+                }
+            }
+            while !stack.is_empty() {
+                self.lru.push_back(stack.pop().unwrap());
+            }
             if self.dirty_pages.contains(&pop_page_no) {
                 let page = self.page_table.get(&pop_page_no).unwrap();
                 self.dm.write_page(pop_page_no, &page.data)?;
-                self.dirty_pages.remove(&pop_page_no);
-            }
-            if self.dirty_pages.contains(&pop_page_no) {
-                self.dm.write_page(pop_page_no, &self.page_table.get(&pop_page_no).unwrap().data)?;
                 self.dirty_pages.remove(&pop_page_no);
             }
             self.page_table.remove(&pop_page_no);
         }
         Ok(())
     }
+
+    fn pin(&mut self, page_no: u32) -> Result<()>{
+        if !self.page_table.contains_key(&page_no) {
+            return Err(CustomError::Err_from_wrong_arg(format!("Page {} not found in buffer pool", page_no)));
+        }
+        let mut count = self.pins.entry(page_no).or_insert(0);
+        *count += 1;
+        Ok(())
+    }
+
+    pub fn unpin(&mut self, page_no: u32) -> Result<()> {
+        if !self.page_table.contains_key(&page_no) {
+            return Err(CustomError::Err_from_wrong_arg(format!("Page {} not found in buffer pool", page_no)));
+        }
+        if let Some(count) = self.pins.get_mut(&page_no) {
+            if *count > 0 {
+                *count -= 1;
+            } else {
+                return Err(CustomError::Err_from_wrong_arg(format!("Page {} is not pinned", page_no)));
+            }
+        }
+        Ok(())
+    }
+    
 
     
 }
