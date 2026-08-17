@@ -1,21 +1,17 @@
-use crate::page::{Page, PAGE_SIZE};
-use crate::diskManager::DiskManager;
+use crate::error::{CustomError, Result};
+use crate::storage::disk_manager::DiskManager;
+use crate::storage::page::Page;
 use std::collections::{HashMap, HashSet, VecDeque};
-use crate::customErrors::{CustomError, Result};
 
-pub const BUFFER_POOL_CAPACITY: usize = 5; // aise hi 5 set hai -> will change later to dynamic value according to system specific needs.
-
-
-// current implementation uses vec for LRU cache but will change it to HashMap<Page_no, Node> and doublyLinkedList in future implementation.
-
+pub const BUFFER_POOL_CAPACITY: usize = 5;
 
 pub struct BufferPool {
     dm: DiskManager,
     page_table: HashMap<u32, Page>,
     dirty_pages: HashSet<u32>,
     capacity: usize,
-    lru: VecDeque<u32>,       // page_no -> LRU order
-    pins: HashMap<u32, u32>, // page_no -> pin_count
+    lru: VecDeque<u32>,
+    pins: HashMap<u32, u32>,
 }
 
 impl BufferPool {
@@ -38,14 +34,14 @@ impl BufferPool {
     }
 
     pub fn fetch_page(&mut self, page_no: u32) -> Result<&Page> {
-        if !self.page_table.contains_key(&page_no) {
+        if !self.page_table.contains_key(&page_no) { 
             let page = self.dm.read_page(page_no)?;
             self.page_table.insert(page_no, page);
             self.pin(page_no)?;
             self.lru.push_front(page_no);
             self.evict()?;
             return Ok(self.page_table.get(&page_no).unwrap());
-        } else{
+        } else {
             self.pin(page_no)?;
             self.lru.retain(|&existing_page_no| existing_page_no != page_no);
             self.lru.push_front(page_no);
@@ -53,8 +49,6 @@ impl BufferPool {
             return Ok(self.page_table.get(&page_no).unwrap());
         }
     }
-
-    
 
     pub fn fetch_page_mut(&mut self, page_no: u32) -> Result<&mut Page> {
         if !self.page_table.contains_key(&page_no) {
@@ -65,7 +59,7 @@ impl BufferPool {
             self.lru.push_front(page_no);
             self.evict()?;
             return Ok(self.page_table.get_mut(&page_no).unwrap());
-        }else {
+        } else {
             self.pin(page_no)?;
             self.dirty_pages.insert(page_no);
             self.lru.retain(|&existing_page_no| existing_page_no != page_no);
@@ -74,9 +68,6 @@ impl BufferPool {
             return Ok(self.page_table.get_mut(&page_no).unwrap());
         }
     }
-
-    // flush all changes to disk and clear dirt page set.
-    // NOTE : -> IT doesnt affect LRU OR available page map in buufer.
 
     pub fn flush(&mut self) -> Result<()> {
         for page_no in &self.dirty_pages {
@@ -87,18 +78,16 @@ impl BufferPool {
         Ok(())
     }
 
-    // Evicts the least recently used page from the buffer -> capacity exceeded case.
-
     fn evict(&mut self) -> Result<()> {
-        if(self.lru.len() > self.capacity) {
+        if self.lru.len() > self.capacity {
             let mut stack = Vec::new();
             let mut pop_page_no: u32 = 0;
             while true {
-                if( self.lru.len() == 0) {
+                if self.lru.len() == 0 {
                     return Err(CustomError::Err_from_wrong_arg("Buffer pool has no unpinned pages, cannot evict any page".to_string()));
                 }
                 pop_page_no = self.lru.pop_back().unwrap();
-                if self.pins.get(&pop_page_no).unwrap_or(&0) != &0{
+                if self.pins.get(&pop_page_no).unwrap_or(&0) != &0 {
                     stack.push(pop_page_no);
                 } else {
                     break;
@@ -117,7 +106,7 @@ impl BufferPool {
         Ok(())
     }
 
-    fn pin(&mut self, page_no: u32) -> Result<()>{
+    fn pin(&mut self, page_no: u32) -> Result<()> {
         if !self.page_table.contains_key(&page_no) {
             return Err(CustomError::Err_from_wrong_arg(format!("Page {} not found in buffer pool", page_no)));
         }
@@ -139,8 +128,4 @@ impl BufferPool {
         }
         Ok(())
     }
-    
-
-    
 }
-
