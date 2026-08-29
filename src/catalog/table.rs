@@ -1,7 +1,9 @@
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct TableId {
     id: u32,
 }
+
 
 impl TableId {
     pub fn new(id: u32) -> TableId {
@@ -12,7 +14,7 @@ impl TableId {
         self.id
     }
 }
-
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct TableMetadata {
     table_id: TableId,
     start_page: u32,
