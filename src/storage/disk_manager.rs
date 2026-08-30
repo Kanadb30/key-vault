@@ -1,5 +1,5 @@
 use crate::error::{CustomError, Result};
-use crate::storage::page::{Page, PAGE_SIZE};
+use crate::storage::page::{Page, PAGE_SIZE, PageType};
 use std::fs::{File, OpenOptions};
 use std::io::{Read, Seek, SeekFrom, Write};
 
@@ -41,7 +41,7 @@ impl DiskManager {
     pub fn create_page(&mut self) -> Result<Page> {
         let page_no = self.file.metadata()?.len() / PAGE_SIZE as u64;
         self.file.seek(SeekFrom::Start(page_no * PAGE_SIZE as u64))?;
-        let page = Page::new(page_no as u32);
+        let page = Page::new(page_no as u32, PageType::DataPage);
         self.file.write_all(&page.data)?;
         Ok(page)
     }
