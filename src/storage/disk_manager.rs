@@ -38,10 +38,10 @@ impl DiskManager {
         Ok(page)
     }
 
-    pub fn create_page(&mut self) -> Result<Page> {
+    pub fn create_page(&mut self, page_type: PageType) -> Result<Page> {
         let page_no = self.file.metadata()?.len() / PAGE_SIZE as u64;
         self.file.seek(SeekFrom::Start(page_no * PAGE_SIZE as u64))?;
-        let page = Page::new(page_no as u32, PageType::DataPage);
+        let page = Page::new(page_no as u32, page_type);
         self.file.write_all(&page.data)?;
         Ok(page)
     }
