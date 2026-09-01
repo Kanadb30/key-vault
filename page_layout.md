@@ -98,7 +98,8 @@ Page 0
 │ next_page_no     4 bytes BE  │
 ├──────────────────────────────┤
 │ DatabaseMetadata             │
-│ catalog_page_no   4 bytes    │
+│ next_table_id   4 bytes      |
+│ catalog_page_no 4 bytes      |
 ├──────────────────────────────┤
 │ FREE SPACE                   │
 └──────────────────────────────┘
