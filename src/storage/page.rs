@@ -132,8 +132,8 @@ impl Page {
         self.page_no
     }
 
-    pub fn get_page_type(&self) -> &PageType {
-        &self.page_type
+    pub fn get_page_type(&self) -> PageType {
+        self.page_type
     }
 
     pub fn get_data_end(&self) -> u16 {
@@ -152,4 +152,24 @@ impl Page {
         self.next_page_no = next_page_no;
         self.data[10..14].copy_from_slice(&next_page_no.to_be_bytes());
     }
+
+    pub fn set_next_table_id(&mut self, next_table_id: u32) -> Result<()> {
+        if self.page_type == PageType::StartPage {
+            self.data[14..18].copy_from_slice(&next_table_id.to_be_bytes());
+        } else {
+            return Err(CustomError::Err_from_wrong_arg("Cannot set start metadata on a non-start page".to_string())).unwrap();
+        }
+        Ok(())
+    }
+
+    pub fn get_next_table_id(&self) -> Result<u32> {
+        if self.page_type == PageType::StartPage {
+            let mut metadata = [0u8; 4];
+            metadata.copy_from_slice(&self.data[14..18]);
+            Ok(u32::from_be_bytes(metadata))
+        } else {
+            Err(CustomError::Err_from_wrong_arg("Cannot get start metadata from a non-start page".to_string()))
+        }
+    }
+
 }
