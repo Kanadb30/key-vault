@@ -1,6 +1,6 @@
 use crate::error::{CustomError, Result};
 use crate::storage::disk_manager::DiskManager;
-use crate::storage::page::Page;
+use crate::storage::page::{Page, PAGE_SIZE, PageType};
 use std::collections::{HashMap, HashSet, VecDeque};
 
 pub const BUFFER_POOL_CAPACITY: usize = 5;
@@ -69,6 +69,16 @@ impl BufferPool {
         }
     }
 
+    pub fn create_page(&mut self, page_type: PageType) -> Result<&Page> {
+        let page = self.dm.create_page(page_type)?;
+        let page_no = page.get_page_no();
+        self.page_table.insert(page_no, page);
+        self.pin(page_no)?;
+        self.lru.push_front(page_no);
+        self.evict()?;
+        return Ok(self.page_table.get(&page_no).unwrap());
+    }
+
     pub fn flush(&mut self) -> Result<()> {
         for page_no in &self.dirty_pages {
             let page = self.page_table.get(page_no).unwrap();
@@ -127,5 +137,9 @@ impl BufferPool {
             }
         }
         Ok(())
+    }
+
+    pub fn total_pages_in_disk(&self) -> Result<u64> {
+        self.dm.total_pages()
     }
 }
