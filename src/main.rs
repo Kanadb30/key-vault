@@ -8,6 +8,5 @@ use kb_db::storage::disk_manager::DiskManager;
 
 use std::fs;
 
-fn main() -> Result<()> {
-
+fn main() {
 }

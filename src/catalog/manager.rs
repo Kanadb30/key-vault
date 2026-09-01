@@ -7,9 +7,9 @@ pub struct CatalogManager {
 }
 
 impl CatalogManager {
-    pub fn new() -> CatalogManager {
+    pub fn new(next_table_id: u32) -> CatalogManager {
         CatalogManager { 
-            next_table_id: 0,
+            next_table_id: next_table_id,
             catalog: Catalog::new() 
         }
     }
