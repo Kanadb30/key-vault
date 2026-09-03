@@ -1,5 +1,5 @@
 use crate::catalog::manager::CatalogManager;
-use crate::catalog::table::TableMetadata;
+use crate::catalog::table::{TableMetadata, TableId};
 use crate::storage::buffer_pool::BufferPool;
 use crate::error::{Result, CustomError};
 use crate::storage::page::{PageType, PAGE_HEADER_SIZE};
@@ -29,6 +29,9 @@ impl Database {
                     return Err(CustomError::Err_from_wrong_arg("The first page is missing or corrupted, but other pages exist".to_string()));
                 }
                 b_p.create_page(PageType::StartPage)?;
+                let mut start_page = b_p.fetch_page_mut(0)?;
+                start_page.set_next_table_id(0)?;
+                start_page.set_catalog_page_no(u32::MAX)?;
                 (0, u32::MAX)
             }
         };
@@ -55,6 +58,7 @@ impl Database {
         }
 
         b_p.unpin(0)?;
+        b_p.flush()?;
         
         Ok(Database {
             catalog_manager: c_m,
@@ -64,19 +68,73 @@ impl Database {
 
     // TODO: Implement methods for creating tables, inserting records, querying records, etc.
 
-    // fn create_table(&mut self, table_name: &str) -> Result<u32> {
-    //     let catalog_page_no = self.buffer_pool.fetch_page(0)?.get_catalog_page_no()?;
-    //     if catalog_page_no == u32::MAX {
-    //         // first table creation
-    //         let new_catalog_page_no = self.buffer_pool.create_page(PageType::CatalogPage)?.get_page_no();
-            
-    //     }
+    pub fn craete_table(&mut self, table_name: String) -> Result<TableId> {
+        let start_page_no = self.buffer_pool.create_page(PageType::DataPage)?.get_page_no();
+        let table_name_bytes = table_name.as_bytes().to_vec();
+        let table_name_size = table_name_bytes.len() as u16;
+        let table_id = self.catalog_manager.create_table(start_page_no, table_name)?;
+        self.buffer_pool.unpin(start_page_no)?;
 
-    // }
+        self.buffer_pool
+            .fetch_page_mut(0)?
+            .set_next_table_id(table_id.id() + 1)?;
+        self.buffer_pool.unpin(0)?;
 
-    // fn create_table(&mut self, table_name: &str) -> Result<u32> {
-    // }
+        let mut catalog_page_no = {
+            let db_start_page = self.buffer_pool.fetch_page(0)?;
+            let catalog_page_no = db_start_page.get_catalog_page_no()?;
+            self.buffer_pool.unpin(0)?;
+            catalog_page_no
+        };
+
+        if catalog_page_no == u32::MAX {
+            let new_catalog_page_no = self
+                .buffer_pool
+                .create_page(PageType::CatalogPage)?
+                .get_page_no();
+            self.buffer_pool
+                .fetch_page_mut(0)?
+                .set_catalog_page_no(new_catalog_page_no)?;
+            self.buffer_pool.unpin(0)?;
+            catalog_page_no = new_catalog_page_no;
+        }
+
+        let mut page_data_to_insert = Vec::new();
+        page_data_to_insert.extend_from_slice(&table_id.id().to_be_bytes());
+        page_data_to_insert.extend_from_slice(&start_page_no.to_be_bytes());
+        page_data_to_insert.extend_from_slice(&table_name_size.to_be_bytes());
+        page_data_to_insert.extend_from_slice(&table_name_bytes);
+
+        while match self.buffer_pool.fetch_page_mut(catalog_page_no)?.insert_into_page(&page_data_to_insert) {Ok(_) => false,
+        Err(_) => true,} {
+            let unpin_page_no = catalog_page_no;
+            let next_page_no = self.buffer_pool.fetch_page(catalog_page_no)?.get_next_page_no();
+            catalog_page_no = if next_page_no != u32::MAX {
+                next_page_no
+            } else {
+                let new_catalog_page = self.buffer_pool.create_page(PageType::CatalogPage)?;
+                let new_catalog_page_no = new_catalog_page.get_page_no();
+                self.buffer_pool.fetch_page_mut(unpin_page_no)?.set_next_page_no(new_catalog_page_no);
+                new_catalog_page_no
+            };
+            self.buffer_pool.unpin(unpin_page_no)?;
+        }
+        self.buffer_pool.unpin(catalog_page_no)?;
+        Ok(table_id)
+
+    }
+
+    pub fn flush(&mut self) -> Result<()> {
+        self.buffer_pool.flush()
+    }
 
     
 }
+
+impl Drop for Database {
+    fn drop(&mut self) {
+        let _ = self.flush();
+    }
+}
+
 

@@ -187,4 +187,13 @@ impl Page {
         }
     }
 
+    pub fn set_catalog_page_no(&mut self, catalog_page_no: u32) -> Result<()> {
+        if self.page_type == PageType::StartPage {
+            self.data[18..22].copy_from_slice(&catalog_page_no.to_be_bytes());
+            Ok(())
+        } else {
+            Err(CustomError::Err_from_wrong_arg("Cannot set catalog page no on a non-start page".to_string()))
+        }
+    }
+
 }

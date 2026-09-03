@@ -142,4 +142,8 @@ impl BufferPool {
     pub fn total_pages_in_disk(&self) -> Result<u64> {
         self.dm.total_pages()
     }
+    
+    pub fn page_count(&self) -> usize {
+        self.page_table.len()
+    }
 }
