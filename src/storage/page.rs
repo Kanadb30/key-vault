@@ -40,6 +40,11 @@ impl Page {
         data[6..10].copy_from_slice(&HEADER_WITHOUT_PAGE_NO_AND_TYPE);
         data[10..14].copy_from_slice(&u32::MAX.to_be_bytes());
 
+        if page_type == PageType::StartPage {
+            data[14..18].copy_from_slice(&u32::MAX.to_be_bytes());
+            data[18..22].copy_from_slice(&u32::MAX.to_be_bytes());
+        }
+
         Page {
             page_no,
             page_type,
@@ -169,6 +174,16 @@ impl Page {
             Ok(u32::from_be_bytes(metadata))
         } else {
             Err(CustomError::Err_from_wrong_arg("Cannot get start metadata from a non-start page".to_string()))
+        }
+    }
+
+    pub fn get_catalog_page_no(&self) -> Result<u32> {
+        if self.page_type == PageType::StartPage {
+            let mut catalog_page_no_bytes = [0u8; 4];
+            catalog_page_no_bytes.copy_from_slice(&self.data[18..22]);
+            Ok(u32::from_be_bytes(catalog_page_no_bytes))
+        } else {
+            Err(CustomError::Err_from_wrong_arg("Cannot get catalog page no from a non-start page".to_string()))
         }
     }
 
