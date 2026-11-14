@@ -15,8 +15,11 @@ impl Catalog {
 
     pub fn add_table(&mut self, metadata: TableMetadata) -> Result<()>{
         let table_id = metadata.table_id();
-        if self.catalog_items.contains_key(table_id) || self.catalog_items.values().any(|m| m.table_name() == metadata.table_name()) {
-            return Err(CustomError::Err_from_wrong_arg("Table ID already exists in catalog".to_string()));
+        if self.catalog_items.contains_key(table_id) {
+            return Err(CustomError::TableIdExists(table_id.id()));
+        }
+        if self.catalog_items.values().any(|m| m.table_name() == metadata.table_name()) {
+            return Err(CustomError::TableNameExists(metadata.table_name().clone()));
         }
         self.catalog_items.insert(*table_id, metadata);
         Ok(())

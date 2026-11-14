@@ -162,7 +162,7 @@ impl Page {
         if self.page_type == PageType::StartPage {
             self.data[14..18].copy_from_slice(&next_table_id.to_be_bytes());
         } else {
-            return Err(CustomError::Err_from_wrong_arg("Cannot set start metadata on a non-start page".to_string())).unwrap();
+            return Err(CustomError::Err_from_wrong_arg("Cannot set start metadata on a non-start page".to_string()));
         }
         Ok(())
     }

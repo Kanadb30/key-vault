@@ -68,7 +68,7 @@ impl Database {
 
     // TODO: Implement methods for creating tables, inserting records, querying records, etc.
 
-    pub fn craete_table(&mut self, table_name: String) -> Result<TableId> {
+    pub fn create_table(&mut self, table_name: String) -> Result<TableId> {
         let start_page_no = self.buffer_pool.create_page(PageType::DataPage)?.get_page_no();
         let table_name_bytes = table_name.as_bytes().to_vec();
         let table_name_size = table_name_bytes.len() as u16;

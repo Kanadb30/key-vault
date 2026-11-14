@@ -60,7 +60,7 @@ See [page_layout.md](page_layout.md) for detailed page structure specifications 
 
 ### Prerequisites
 
-- **Rust** 1.70+ (edition 2024)
+- **Rust** 1.85+ (edition 2024 requires 1.85 or newer)
 - **Cargo**
 
 ### Dependencies
@@ -78,27 +78,26 @@ On Linux/macOS:
 ```bash
 cargo build
 ```
- & Run
 
-**Prerequisites**: Rust 1.70+, WSL for Windows
+### Run & Test
 
 ```bash
-# Windows (via WSL)
-wsl cargo build
-
 # Linux/macOS
-cargo build
-
-# Run
 cargo run
+cargo test
+```
 
-# Test
-cargo test> Result<()> {
+### Example
+
+```rust
+use kb_db::database::Database;
+
+fn main() -> kb_db::error::Result<()> {
     // Create or open a database
     let db = Database::new("mydb")?;
-    
+
     // Future: Add tables, insert records, execute queries
-    
+
     Ok(())
 }
 ```

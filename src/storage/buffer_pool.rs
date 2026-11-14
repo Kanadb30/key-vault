@@ -90,22 +90,31 @@ impl BufferPool {
 
     fn evict(&mut self) -> Result<()> {
         if self.lru.len() > self.capacity {
-            let mut stack = Vec::new();
-            let mut pop_page_no: u32 = 0;
-            while true {
-                if self.lru.len() == 0 {
-                    return Err(CustomError::Err_from_wrong_arg("Buffer pool has no unpinned pages, cannot evict any page".to_string()));
+            // Pop from the LRU end until an unpinned page is found.
+            // Pinned pages encountered are recorded so they can be restored
+            // in their original LRU order, on both the success and error paths.
+            let mut pinned_seen: Vec<u32> = Vec::new();
+            let victim: Option<u32> = loop {
+                match self.lru.pop_back() {
+                    None => break None,
+                    Some(page_no) => {
+                        if self.pins.get(&page_no).copied().unwrap_or(0) != 0 {
+                            pinned_seen.push(page_no);
+                        } else {
+                            break Some(page_no);
+                        }
+                    }
                 }
-                pop_page_no = self.lru.pop_back().unwrap();
-                if self.pins.get(&pop_page_no).unwrap_or(&0) != &0 {
-                    stack.push(pop_page_no);
-                } else {
-                    break;
-                }
+            };
+            // pinned_seen[0] was popped first, i.e. it sat closest to the LRU
+            // end; pushing back in scan order preserves the original ordering.
+            for page_no in &pinned_seen {
+                self.lru.push_back(*page_no);
             }
-            while !stack.is_empty() {
-                self.lru.push_back(stack.pop().unwrap());
-            }
+            let pop_page_no = match victim {
+                Some(page_no) => page_no,
+                None => return Err(CustomError::Err_from_wrong_arg("Buffer pool has no unpinned pages, cannot evict any page".to_string())),
+            };
             if self.dirty_pages.contains(&pop_page_no) {
                 let page = self.page_table.get(&pop_page_no).unwrap();
                 self.dm.write_page(pop_page_no, &page.data)?;

@@ -29,7 +29,10 @@ impl CatalogManager {
         &self.catalog
     }
 
-    pub fn add_table(&mut self, metadata: TableMetadata) -> Result<()> {
+    /// Recovery-only path: re-adds an existing table with its persisted id
+    /// without advancing `next_table_id`. Not public API — external callers
+    /// must use `create_table`.
+    pub(crate) fn add_table(&mut self, metadata: TableMetadata) -> Result<()> {
         self.catalog.add_table(metadata)
     }
 
