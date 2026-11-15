@@ -1,6 +1,6 @@
 # KB_DB - A Simple Relational Database Engine
 
-**Status**: 🚧 **ONGOING** - Active Development
+**Status**: format-v1 append-only storage and protocol-v1 bridge implemented.
 
 A lightweight, educational database engine written in Rust, implementing core database concepts including page-based storage, buffer pool management, and catalog management.
 
@@ -14,6 +14,43 @@ KB_DB is a from-scratch implementation of a relational database engine focusing 
 - **Table catalog and metadata management**
 - **Error handling and recovery**
 
+## Interface
+
+The engine stores schema-bearing tables and typed rows; SQL parsing, filtering,
+joins, and optimization belong to the Python compiler in the parent project.
+
+```bash
+cargo build
+cargo test
+cargo run -- --db /absolute/demo.db dump-catalog
+cargo run -- --db /absolute/demo.db create-table items '[{"name":"id","type":"INTEGER"}]'
+cargo run -- --db /absolute/demo.db insert items '[[1],[2],[2]]'
+cargo run -- --db /absolute/demo.db scan items
+cargo run -- --db /absolute/demo.db --bridge
+```
+
+Other CLI command: `dump-page N`. `--bridge` speaks NDJSON on stdout and logs
+only to stderr. It requires a protocol-1 ready handshake.
+
+## Invariants
+
+4096-byte pages, a five-page LRU buffer pool, RAII one-page scan pins,
+length-prefixed catalog/data records, non-null i64/TEXT rows, and a 4080-byte
+encoded-record cap. Opens reject legacy v0, unsupported versions, truncated
+pages, malformed records, and cycles. Batch values are validated before
+inserting; duplicates and insertion order survive reopen.
+
+This is not a transactional database: no WAL, crash-atomic multi-page
+operations, multi-process writer locking, updates, or deletes. Do not open
+the same file for simultaneous writers. Explicit `flush` syncs data; Drop is
+best-effort cleanup, not an error-reporting durability boundary.
+
+## Side effects
+
+Creates/opens the exact database path supplied (no implicit `.db` suffix),
+appends pages/rows, and calls `sync_all` on flush. The bridge exits on stdin EOF.
+Files created by the old format are refused, never migrated or overwritten.
+
 
 
 ## Architecture
@@ -23,7 +60,7 @@ KB_DB is a from-scratch implementation of a relational database engine focusing 
 ```
 ┌─────────────────────────────────┐
 │   Application Layer             │
-│   (SQL Parser, Query Engine)    │
+│   (Python compiler / bridge)    │
 └────────────────┬────────────────┘
 ┌────────────────▼────────────────┐
 │   Catalog Layer                 │
@@ -43,18 +80,21 @@ KB_DB is a from-scratch implementation of a relational database engine focusing 
 
 **Storage Layer** (`src/storage/`):
 - `disk_manager.rs` - File I/O and page persistence
-- `buffer_pool.rs` - LRU cache with configurable capacity
+- `buffer_pool.rs` - five-page LRU cache and RAII page guards
 - `page.rs` - Fixed 4KB pages with three types (Start, Catalog, Data)
 
 **Catalog Layer** (`src/catalog/`):
 - `manager.rs` - Table creation and metadata management
-- `table.rs` & `metadata.rs` - Table definitions and schema
+- `table.rs` - Table definitions and schema
+
+`codec.rs` defines positional row and schema-bearing catalog encoding.
 
 **Error Handling** (`src/error.rs`): Custom error types via `thiserror`
 
 ## Page Layout
 
-See [page_layout.md](page_layout.md) for detailed page structure specifications and byte-level layout.
+See [page_layout.md](page_layout.md) for the v1 summary and legacy history;
+the parent project's `docs/format_v1.md` is the normative full specification.
 
 ## Building & Development
 
@@ -66,6 +106,7 @@ See [page_layout.md](page_layout.md) for detailed page structure specifications 
 ### Dependencies
 
 - `thiserror` (2.0) - Error handling
+- `serde`, `serde_json` - typed bridge and CLI JSON
 
 ### Build Instructions
 
@@ -83,7 +124,7 @@ cargo build
 
 ```bash
 # Linux/macOS
-cargo run
+cargo run -- --db /absolute/demo.db dump-catalog
 cargo test
 ```
 
@@ -94,9 +135,8 @@ use kb_db::database::Database;
 
 fn main() -> kb_db::error::Result<()> {
     // Create or open a database
-    let db = Database::new("mydb")?;
-
-    // Future: Add tables, insert records, execute queries
+    let mut db = Database::new("/absolute/mydb.db")?;
+    db.flush()?;
 
     Ok(())
 }

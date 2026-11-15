@@ -1,9 +1,7 @@
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct TableId {
     id: u32,
 }
-
 
 impl TableId {
     pub fn new(id: u32) -> TableId {
@@ -19,11 +17,25 @@ pub struct TableMetadata {
     table_id: TableId,
     start_page: u32,
     table_name: String,
+    columns: Vec<crate::codec::Column>,
 }
 
 impl TableMetadata {
-    pub fn new(table_id: TableId, start_page: u32, table_name: String) -> TableMetadata {
-        TableMetadata { table_id, start_page, table_name }
+    pub fn new(
+        table_id: TableId,
+        start_page: u32,
+        table_name: String,
+        columns: Vec<crate::codec::Column>,
+    ) -> TableMetadata {
+        TableMetadata {
+            table_id,
+            start_page,
+            table_name,
+            columns,
+        }
+    }
+    pub fn columns(&self) -> &[crate::codec::Column] {
+        &self.columns
     }
 
     pub fn table_id(&self) -> &TableId {
@@ -38,4 +50,3 @@ impl TableMetadata {
         &self.table_name
     }
 }
-

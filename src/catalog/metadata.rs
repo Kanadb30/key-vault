@@ -19,10 +19,11 @@ impl DatabaseMetadata {
 
     pub fn deserialize(data: &[u8]) -> Result<DatabaseMetadata> {
         if data.len() != 4 {
-            return Err(CustomError::Err_from_wrong_arg("Invalid data length for DatabaseMetadata".to_string()));
+            return Err(CustomError::Err_from_wrong_arg(
+                "Invalid data length for DatabaseMetadata".to_string(),
+            ));
         }
         let catalog_page_no = u32::from_be_bytes(data.try_into()?);
         Ok(DatabaseMetadata { catalog_page_no })
     }
 }
-

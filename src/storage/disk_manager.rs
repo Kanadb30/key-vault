@@ -1,5 +1,5 @@
 use crate::error::{CustomError, Result};
-use crate::storage::page::{Page, PAGE_SIZE, PageType};
+use crate::storage::page::{PAGE_SIZE, Page, PageType};
 use std::fs::{File, OpenOptions};
 use std::io::{Read, Seek, SeekFrom, Write};
 
@@ -8,56 +8,63 @@ pub struct DiskManager {
 }
 
 impl DiskManager {
-    pub fn new_db(file_name: &str) -> Result<DiskManager> {
-        let file_to_create = format!("{}.db", file_name);
-        let file = match OpenOptions::new().read(true).write(true).create(true).open(&file_to_create) {
-            Ok(file) => file,
-            Err(e) => return Err(CustomError::Err_from_wrong_arg(format!("Error creating file: {}", e))),
-        };
-        Ok(DiskManager { file })
+    /// Paths are explicit; no hidden .db suffix or CWD-relative bridge paths.
+    pub fn new_db(path: &str) -> Result<Self> {
+        let file = OpenOptions::new()
+            .read(true)
+            .write(true)
+            .create_new(true)
+            .open(path)?;
+        Ok(Self { file })
     }
-
-    pub fn open_db(file_name: &str) -> Result<DiskManager> {
-        let file_to_open = format!("{}.db", file_name);
-        let file = match OpenOptions::new().read(true).write(true).open(&file_to_open) {
-            Ok(file) => file,
-            Err(e) => return Err(CustomError::Err_from_wrong_arg(format!("Error opening file: {}", e))),
-        };
-        Ok(DiskManager { file })
-    }
-
-    pub fn read_page(&mut self, page_no: u32) -> Result<Page> {
-        if page_no * PAGE_SIZE as u32 >= self.file.metadata()?.len() as u32 {
-            return Err(CustomError::Err_from_wrong_arg("Page number exceeds file size".to_string()));
+    pub fn open_db(path: &str) -> Result<Self> {
+        let file = OpenOptions::new().read(true).write(true).open(path)?;
+        if file.metadata()?.len() % PAGE_SIZE as u64 != 0 {
+            return Err(CustomError::Corrupt("truncated final page".into()));
         }
-
-        let mut buffer = [0; PAGE_SIZE];
-        self.file.seek(SeekFrom::Start((page_no * PAGE_SIZE as u32).into()))?;
-        self.file.read_exact(&mut buffer)?;
-        let page = Page::create(buffer)?;
+        Ok(Self { file })
+    }
+    pub fn read_page(&mut self, page_no: u32) -> Result<Page> {
+        if page_no as u64 >= self.total_pages()? {
+            return Err(CustomError::Corrupt("page number exceeds file size".into()));
+        }
+        let mut data = [0; PAGE_SIZE];
+        self.file
+            .seek(SeekFrom::Start(page_no as u64 * PAGE_SIZE as u64))?;
+        self.file.read_exact(&mut data)?;
+        let page = Page::create(data)?;
+        if page.get_page_no() != page_no
+            || (page.get_next_page_no() != u32::MAX
+                && page.get_next_page_no() as u64 >= self.total_pages()?)
+        {
+            return Err(CustomError::Corrupt(
+                "page number or next-page pointer invalid".into(),
+            ));
+        }
         Ok(page)
     }
-
-    pub fn create_page(&mut self, page_type: PageType) -> Result<Page> {
-        let page_no = self.file.metadata()?.len() / PAGE_SIZE as u64;
-        self.file.seek(SeekFrom::Start(page_no * PAGE_SIZE as u64))?;
-        let page = Page::new(page_no as u32, page_type);
+    pub fn create_page(&mut self, kind: PageType) -> Result<Page> {
+        let no = u32::try_from(self.total_pages()?)
+            .map_err(|_| CustomError::Corrupt("too many pages".into()))?;
+        let page = Page::new(no, kind);
+        self.file.seek(SeekFrom::End(0))?;
         self.file.write_all(&page.data)?;
         Ok(page)
     }
-
-    pub fn write_page(&mut self, page_no: u32, data: &[u8; PAGE_SIZE]) -> Result<()> {
-        if page_no * PAGE_SIZE as u32 >= self.file.metadata()?.len() as u32 {
-            return Err(CustomError::Err_from_wrong_arg("Page number exceeds file size".to_string()));
+    pub fn write_page(&mut self, no: u32, data: &[u8; PAGE_SIZE]) -> Result<()> {
+        if no as u64 >= self.total_pages()? {
+            return Err(CustomError::Corrupt("write beyond EOF".into()));
         }
-
-        self.file.seek(SeekFrom::Start((page_no * PAGE_SIZE as u32).into()))?;
+        self.file
+            .seek(SeekFrom::Start(no as u64 * PAGE_SIZE as u64))?;
         self.file.write_all(data)?;
         Ok(())
     }
-
     pub fn total_pages(&self) -> Result<u64> {
-        let total_pages = self.file.metadata()?.len() / PAGE_SIZE as u64;
-        Ok(total_pages)
+        Ok(self.file.metadata()?.len() / PAGE_SIZE as u64)
+    }
+    pub fn sync(&self) -> Result<()> {
+        self.file.sync_all()?;
+        Ok(())
     }
 }
