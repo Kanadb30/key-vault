@@ -1,3 +1,13 @@
-/target
-
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+node_modules/
+target/
+console/dist/
+*.db
 progress_cur.md
+.DS_Store
+uv.lock
+console/test-results/
+console/playwright-report/

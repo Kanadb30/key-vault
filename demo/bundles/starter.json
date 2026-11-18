@@ -1,0 +1,581 @@
+{
+  "run_schema_version": 1,
+  "compiler_version": "0.1.0",
+  "inputs": {
+    "frontend_id": "sql",
+    "verbatim": "SELECT name\nFROM student\nWHERE marks > 80;",
+    "normalized": "SELECT name FROM student WHERE marks > 80 ;"
+  },
+  "stages": [
+    {
+      "name": "lex",
+      "status": "ok",
+      "timing_ms": 2.204788,
+      "artifact": {
+        "token_count": 9,
+        "tokens": [
+          {
+            "type": "SELECT",
+            "value": "SELECT",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 0,
+              "char_end": 6,
+              "line": 1,
+              "col": 1,
+              "end_line": 1,
+              "end_col": 7
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "name",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 7,
+              "char_end": 11,
+              "line": 1,
+              "col": 8,
+              "end_line": 1,
+              "end_col": 12
+            }
+          },
+          {
+            "type": "FROM",
+            "value": "FROM",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 12,
+              "char_end": 16,
+              "line": 2,
+              "col": 1,
+              "end_line": 2,
+              "end_col": 5
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "student",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 17,
+              "char_end": 24,
+              "line": 2,
+              "col": 6,
+              "end_line": 2,
+              "end_col": 13
+            }
+          },
+          {
+            "type": "WHERE",
+            "value": "WHERE",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 25,
+              "char_end": 30,
+              "line": 3,
+              "col": 1,
+              "end_line": 3,
+              "end_col": 6
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "marks",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 31,
+              "char_end": 36,
+              "line": 3,
+              "col": 7,
+              "end_line": 3,
+              "end_col": 12
+            }
+          },
+          {
+            "type": "COMP_OP",
+            "value": ">",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 37,
+              "char_end": 38,
+              "line": 3,
+              "col": 13,
+              "end_line": 3,
+              "end_col": 14
+            }
+          },
+          {
+            "type": "INT",
+            "value": "80",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 39,
+              "char_end": 41,
+              "line": 3,
+              "col": 15,
+              "end_line": 3,
+              "end_col": 17
+            }
+          },
+          {
+            "type": "SEMICOLON",
+            "value": ";",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 41,
+              "char_end": 42,
+              "line": 3,
+              "col": 17,
+              "end_line": 3,
+              "end_col": 18
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "parse",
+      "status": "ok",
+      "timing_ms": 0.311603,
+      "artifact": {
+        "ast": "Select\n├── columns: [name]\n├── from: student\n└── where: [Compare(marks, \">\", 80)]",
+        "tree": {
+          "columns": [
+            {
+              "qualifier": null,
+              "name": "name",
+              "locator": {
+                "kind": "sql_span",
+                "char_start": 7,
+                "char_end": 11,
+                "line": 1,
+                "col": 8,
+                "end_line": 1,
+                "end_col": 12
+              }
+            }
+          ],
+          "from_table": {
+            "name": "student",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 17,
+              "char_end": 24,
+              "line": 2,
+              "col": 6,
+              "end_line": 2,
+              "end_col": 13
+            }
+          },
+          "join": null,
+          "where": [
+            {
+              "column": {
+                "qualifier": null,
+                "name": "marks",
+                "locator": {
+                  "kind": "sql_span",
+                  "char_start": 31,
+                  "char_end": 36,
+                  "line": 3,
+                  "col": 7,
+                  "end_line": 3,
+                  "end_col": 12
+                }
+              },
+              "op": ">",
+              "literal": {
+                "value": 80,
+                "locator": {
+                  "kind": "sql_span",
+                  "char_start": 39,
+                  "char_end": 41,
+                  "line": 3,
+                  "col": 15,
+                  "end_line": 3,
+                  "end_col": 17
+                }
+              },
+              "locator": {
+                "kind": "sql_span",
+                "char_start": 31,
+                "char_end": 41,
+                "line": 3,
+                "col": 7,
+                "end_line": 3,
+                "end_col": 17
+              }
+            }
+          ],
+          "locator": {
+            "kind": "sql_span",
+            "char_start": 0,
+            "char_end": 42,
+            "line": 1,
+            "col": 1,
+            "end_line": 3,
+            "end_col": 18
+          }
+        }
+      }
+    },
+    {
+      "name": "bind",
+      "status": "ok",
+      "timing_ms": 0.034027,
+      "artifact": {
+        "tables_in_scope": [
+          "student"
+        ],
+        "bound": {
+          "columns": [
+            {
+              "table": "student",
+              "column": "name",
+              "type": "TEXT"
+            }
+          ],
+          "from_table": "student",
+          "join": null,
+          "where": [
+            {
+              "column": {
+                "table": "student",
+                "column": "marks",
+                "type": "INTEGER"
+              },
+              "op": ">",
+              "literal_value": 80,
+              "literal_kind": "int",
+              "locator": {
+                "kind": "sql_span",
+                "char_start": 31,
+                "char_end": 41,
+                "line": 3,
+                "col": 7,
+                "end_line": 3,
+                "end_col": 17
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "plan",
+      "status": "ok",
+      "timing_ms": 0.017342,
+      "artifact": {
+        "root": "Project",
+        "plan": {
+          "node_id": 3,
+          "operator": "Project",
+          "label": "name",
+          "children": [
+            {
+              "node_id": 2,
+              "operator": "Filter",
+              "label": "student.marks > 80",
+              "children": [
+                {
+                  "node_id": 1,
+                  "operator": "Scan",
+                  "label": "student",
+                  "children": [],
+                  "detail": {
+                    "table": "student"
+                  }
+                }
+              ],
+              "detail": {
+                "terms": [
+                  "student.marks > 80"
+                ],
+                "term_ids": [
+                  "term#1"
+                ]
+              }
+            }
+          ],
+          "detail": {
+            "columns": [
+              "name"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "optimize",
+      "status": "ok",
+      "timing_ms": 0.093642,
+      "artifact": {
+        "moved_terms": 0,
+        "diff": []
+      }
+    },
+    {
+      "name": "execute",
+      "status": "ok",
+      "timing_ms": 0.064305,
+      "artifact": {
+        "pre_rows": [
+          [
+            "Asha"
+          ],
+          [
+            "Meera"
+          ]
+        ],
+        "post_rows": [
+          [
+            "Asha"
+          ],
+          [
+            "Meera"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "verify",
+      "status": "ok",
+      "timing_ms": 0.287547,
+      "artifact": {
+        "sql_sent": "SELECT name\nFROM student\nWHERE marks > 80;",
+        "sqlite_rows": [
+          [
+            "Asha"
+          ],
+          [
+            "Meera"
+          ]
+        ],
+        "counter_diff": null,
+        "passed": true,
+        "compared": {
+          "pre": true,
+          "post": true
+        }
+      }
+    }
+  ],
+  "plans": {
+    "pre": {
+      "node_id": 3,
+      "operator": "Project",
+      "label": "name",
+      "children": [
+        {
+          "node_id": 2,
+          "operator": "Filter",
+          "label": "student.marks > 80",
+          "children": [
+            {
+              "node_id": 1,
+              "operator": "Scan",
+              "label": "student",
+              "children": [],
+              "detail": {
+                "table": "student"
+              }
+            }
+          ],
+          "detail": {
+            "terms": [
+              "student.marks > 80"
+            ],
+            "term_ids": [
+              "term#1"
+            ]
+          }
+        }
+      ],
+      "detail": {
+        "columns": [
+          "name"
+        ]
+      }
+    },
+    "post": {
+      "node_id": 3,
+      "operator": "Project",
+      "label": "name",
+      "children": [
+        {
+          "node_id": 2,
+          "operator": "Filter",
+          "label": "student.marks > 80",
+          "children": [
+            {
+              "node_id": 1,
+              "operator": "Scan",
+              "label": "student",
+              "children": [],
+              "detail": {
+                "table": "student"
+              }
+            }
+          ],
+          "detail": {
+            "terms": [
+              "student.marks > 80"
+            ],
+            "term_ids": [
+              "term#1"
+            ]
+          }
+        }
+      ],
+      "detail": {
+        "columns": [
+          "name"
+        ]
+      }
+    }
+  },
+  "plans_ascii": {
+    "pre": "Project(name)\n└── Filter(student.marks > 80)\n    └── Scan(student)",
+    "post": "Project(name)\n└── Filter(student.marks > 80)\n    └── Scan(student)"
+  },
+  "plan_diff": [],
+  "node_stats": {
+    "pre": [
+      {
+        "node_id": 1,
+        "operator": "Scan",
+        "label": "student",
+        "rows_in": null,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 4,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 9381
+      },
+      {
+        "node_id": 2,
+        "operator": "Filter",
+        "label": "student.marks > 80",
+        "rows_in": 4,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 13729
+      },
+      {
+        "node_id": 3,
+        "operator": "Project",
+        "label": "name",
+        "rows_in": 2,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 18068
+      }
+    ],
+    "post": [
+      {
+        "node_id": 1,
+        "operator": "Scan",
+        "label": "student",
+        "rows_in": null,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 4,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 5251
+      },
+      {
+        "node_id": 2,
+        "operator": "Filter",
+        "label": "student.marks > 80",
+        "rows_in": 4,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 7457
+      },
+      {
+        "node_id": 3,
+        "operator": "Project",
+        "label": "name",
+        "rows_in": 2,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 9684
+      }
+    ]
+  },
+  "rows": {
+    "columns": [
+      "name"
+    ],
+    "rows": [
+      [
+        "Asha"
+      ],
+      [
+        "Meera"
+      ]
+    ],
+    "count": 2
+  },
+  "metrics": {
+    "join_pairs_tried": {
+      "pre": null,
+      "post": null
+    },
+    "join_pairs_matched": {
+      "pre": null,
+      "post": null
+    },
+    "left_in": {
+      "pre": null,
+      "post": null
+    },
+    "right_in": {
+      "pre": null,
+      "post": null
+    },
+    "rows_out": {
+      "pre": 2,
+      "post": 2
+    }
+  },
+  "errors": [],
+  "sqlite_cross_check": {
+    "sql_sent": "SELECT name\nFROM student\nWHERE marks > 80;",
+    "sqlite_rows": [
+      [
+        "Asha"
+      ],
+      [
+        "Meera"
+      ]
+    ],
+    "counter_diff": null,
+    "passed": true,
+    "compared": {
+      "pre": true,
+      "post": true
+    }
+  },
+  "provenance": {
+    "backend": "fixtures",
+    "engine_commit": null,
+    "fixture_set": "default-v1",
+    "protocol": null
+  }
+}

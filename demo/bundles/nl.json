@@ -1,0 +1,986 @@
+{
+  "run_schema_version": 1,
+  "compiler_version": "0.1.0",
+  "inputs": {
+    "frontend_id": "nl",
+    "verbatim": "show student names and department names where marks > 80",
+    "normalized": "SELECT student.name, department.dept_name FROM student JOIN department ON student.dept_id = department.id WHERE student.marks > 80;",
+    "generated_sql": "SELECT student.name, department.dept_name FROM student JOIN department ON student.dept_id = department.id WHERE student.marks > 80;"
+  },
+  "stages": [
+    {
+      "name": "lex",
+      "status": "ok",
+      "timing_ms": 8.516305,
+      "artifact": {
+        "token_count": 10,
+        "tokens": [
+          {
+            "type": "COMMAND",
+            "value": "show",
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 0,
+              "char_end": 4,
+              "line": 1,
+              "col": 1,
+              "end_line": 1,
+              "end_col": 5
+            }
+          },
+          {
+            "type": "WORD",
+            "value": "student",
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 5,
+              "char_end": 12,
+              "line": 1,
+              "col": 6,
+              "end_line": 1,
+              "end_col": 13
+            }
+          },
+          {
+            "type": "WORD",
+            "value": "names",
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 13,
+              "char_end": 18,
+              "line": 1,
+              "col": 14,
+              "end_line": 1,
+              "end_col": 19
+            }
+          },
+          {
+            "type": "AND",
+            "value": "and",
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 19,
+              "char_end": 22,
+              "line": 1,
+              "col": 20,
+              "end_line": 1,
+              "end_col": 23
+            }
+          },
+          {
+            "type": "WORD",
+            "value": "department",
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 23,
+              "char_end": 33,
+              "line": 1,
+              "col": 24,
+              "end_line": 1,
+              "end_col": 34
+            }
+          },
+          {
+            "type": "WORD",
+            "value": "names",
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 34,
+              "char_end": 39,
+              "line": 1,
+              "col": 35,
+              "end_line": 1,
+              "end_col": 40
+            }
+          },
+          {
+            "type": "WHERE",
+            "value": "where",
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 40,
+              "char_end": 45,
+              "line": 1,
+              "col": 41,
+              "end_line": 1,
+              "end_col": 46
+            }
+          },
+          {
+            "type": "WORD",
+            "value": "marks",
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 46,
+              "char_end": 51,
+              "line": 1,
+              "col": 47,
+              "end_line": 1,
+              "end_col": 52
+            }
+          },
+          {
+            "type": "GT",
+            "value": ">",
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 52,
+              "char_end": 53,
+              "line": 1,
+              "col": 53,
+              "end_line": 1,
+              "end_col": 54
+            }
+          },
+          {
+            "type": "INT",
+            "value": "80",
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 54,
+              "char_end": 56,
+              "line": 1,
+              "col": 55,
+              "end_line": 1,
+              "end_col": 57
+            }
+          }
+        ],
+        "language": "nl"
+      }
+    },
+    {
+      "name": "parse",
+      "status": "ok",
+      "timing_ms": 0.50608,
+      "artifact": {
+        "ast": "Select\n├── columns: [student.name, department.dept_name]\n├── from: student\n├── join: department ON student.dept_id = department.id\n└── where: [Compare(student.marks, \">\", 80)]",
+        "tree": {
+          "columns": [
+            {
+              "qualifier": "student",
+              "name": "name",
+              "locator": {
+                "kind": "nl_span",
+                "char_start": 5,
+                "char_end": 18,
+                "line": 1,
+                "col": 6,
+                "end_line": 1,
+                "end_col": 19
+              }
+            },
+            {
+              "qualifier": "department",
+              "name": "dept_name",
+              "locator": {
+                "kind": "nl_span",
+                "char_start": 23,
+                "char_end": 39,
+                "line": 1,
+                "col": 24,
+                "end_line": 1,
+                "end_col": 40
+              }
+            }
+          ],
+          "from_table": {
+            "name": "student",
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 0,
+              "char_end": 56,
+              "line": 1,
+              "col": 1,
+              "end_line": 1,
+              "end_col": 57
+            }
+          },
+          "join": {
+            "table": "department",
+            "table_locator": {
+              "kind": "nl_span",
+              "char_start": 0,
+              "char_end": 56,
+              "line": 1,
+              "col": 1,
+              "end_line": 1,
+              "end_col": 57
+            },
+            "on_left": {
+              "qualifier": "student",
+              "name": "dept_id",
+              "locator": {
+                "kind": "nl_span",
+                "char_start": 0,
+                "char_end": 56,
+                "line": 1,
+                "col": 1,
+                "end_line": 1,
+                "end_col": 57
+              }
+            },
+            "on_right": {
+              "qualifier": "department",
+              "name": "id",
+              "locator": {
+                "kind": "nl_span",
+                "char_start": 0,
+                "char_end": 56,
+                "line": 1,
+                "col": 1,
+                "end_line": 1,
+                "end_col": 57
+              }
+            },
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 0,
+              "char_end": 56,
+              "line": 1,
+              "col": 1,
+              "end_line": 1,
+              "end_col": 57
+            }
+          },
+          "where": [
+            {
+              "column": {
+                "qualifier": "student",
+                "name": "marks",
+                "locator": {
+                  "kind": "nl_span",
+                  "char_start": 46,
+                  "char_end": 51,
+                  "line": 1,
+                  "col": 47,
+                  "end_line": 1,
+                  "end_col": 52
+                }
+              },
+              "op": ">",
+              "literal": {
+                "value": 80,
+                "locator": {
+                  "kind": "nl_span",
+                  "char_start": 54,
+                  "char_end": 56,
+                  "line": 1,
+                  "col": 55,
+                  "end_line": 1,
+                  "end_col": 57
+                }
+              },
+              "locator": {
+                "kind": "nl_span",
+                "char_start": 46,
+                "char_end": 56,
+                "line": 1,
+                "col": 47,
+                "end_line": 1,
+                "end_col": 57
+              }
+            }
+          ],
+          "locator": {
+            "kind": "nl_span",
+            "char_start": 0,
+            "char_end": 56,
+            "line": 1,
+            "col": 1,
+            "end_line": 1,
+            "end_col": 57
+          }
+        },
+        "nl_ast": {
+          "command": "show",
+          "projection": {
+            "fields": [
+              {
+                "words": [
+                  "student",
+                  "names"
+                ],
+                "owner": null,
+                "form": "words",
+                "locator": {
+                  "kind": "nl_span",
+                  "char_start": 5,
+                  "char_end": 18,
+                  "line": 1,
+                  "col": 6,
+                  "end_line": 1,
+                  "end_col": 19
+                }
+              },
+              {
+                "words": [
+                  "department",
+                  "names"
+                ],
+                "owner": null,
+                "form": "words",
+                "locator": {
+                  "kind": "nl_span",
+                  "char_start": 23,
+                  "char_end": 39,
+                  "line": 1,
+                  "col": 24,
+                  "end_line": 1,
+                  "end_col": 40
+                }
+              }
+            ],
+            "all": false,
+            "locator": {
+              "kind": "nl_span",
+              "char_start": 5,
+              "char_end": 39,
+              "line": 1,
+              "col": 6,
+              "end_line": 1,
+              "end_col": 40
+            }
+          },
+          "source": null,
+          "conditions": [
+            {
+              "field": {
+                "words": [
+                  "marks"
+                ],
+                "owner": null,
+                "form": "words",
+                "locator": {
+                  "kind": "nl_span",
+                  "char_start": 46,
+                  "char_end": 51,
+                  "line": 1,
+                  "col": 47,
+                  "end_line": 1,
+                  "end_col": 52
+                }
+              },
+              "operator": {
+                "value": ">",
+                "locator": {
+                  "kind": "nl_span",
+                  "char_start": 52,
+                  "char_end": 53,
+                  "line": 1,
+                  "col": 53,
+                  "end_line": 1,
+                  "end_col": 54
+                }
+              },
+              "literal": {
+                "value": 80,
+                "kind": "integer",
+                "locator": {
+                  "kind": "nl_span",
+                  "char_start": 54,
+                  "char_end": 56,
+                  "line": 1,
+                  "col": 55,
+                  "end_line": 1,
+                  "end_col": 57
+                }
+              },
+              "locator": {
+                "kind": "nl_span",
+                "char_start": 46,
+                "char_end": 56,
+                "line": 1,
+                "col": 47,
+                "end_line": 1,
+                "end_col": 57
+              }
+            }
+          ],
+          "locator": {
+            "kind": "nl_span",
+            "char_start": 0,
+            "char_end": 56,
+            "line": 1,
+            "col": 1,
+            "end_line": 1,
+            "end_col": 57
+          }
+        },
+        "nl_ast_text": "NLQuery(show)\n├── Projection\n│   ├── Field(student names)\n│   └── Field(department names)\n├── Source(omitted)\n└── Conditions\n    └── Compare(marks, >, 80)",
+        "nl_grammar": "start: PLEASE? command ME? projection source_clause? where_clause? ending?\ncommand: COMMAND\nprojection: ALL? field ((COMMA AND? | AND) field)*\n\n?field: THE? phrase                     -> plain_field\n      | THE? QUALIFIED                  -> qualified_field\n      | THE? phrase OF THE? phrase      -> of_field\n      | THE? POSSESSED phrase           -> possessive_field\nphrase: WORD+\ntable: phrase\nsource_clause: FROM THE? table ((AND | JOIN) THE? table on_clause?)?\non_clause: ON field equality field\nequality: EQ | EQUAL TO? | EQUALS TO?\n\nwhere_clause: WHERE comparison (AND comparison)*\n?comparison: field operator literal          -> op_comparison\n           | field IS operator literal       -> copula_comparison\n           | field IS literal                -> is_comparison\n           | field BETWEEN literal AND literal -> between_comparison\n           | field IS BETWEEN literal AND literal -> between_comparison\noperator: GT                              -> gt\n        | GREATER THAN                    -> gt\n        | MORE THAN                       -> gt\n        | ABOVE                           -> gt\n        | OVER                            -> gt\n        | GE                              -> ge\n        | AT LEAST                        -> ge\n        | NO LESS THAN                    -> ge\n        | GREATER THAN OR EQUAL TO?        -> ge\n        | MORE THAN OR EQUAL TO?           -> ge\n        | LT                              -> lt\n        | LESS THAN                       -> lt\n        | BELOW                           -> lt\n        | UNDER                           -> lt\n        | LE                              -> le\n        | AT MOST                         -> le\n        | NO MORE THAN                    -> le\n        | LESS THAN OR EQUAL TO?           -> le\n        | EQ                              -> eq\n        | EQUAL TO?                       -> eq\n        | EQUALS TO?                      -> eq\n        | EXACTLY                         -> eq\n        | NE                              -> ne\n        | NOT EQUAL TO?                   -> ne\n        | NOT EQUALS TO?                  -> ne\n        | NOT                             -> ne\nliteral: INT | STRING\nending: DOT | SEMICOLON | QUESTION | EXCLAMATION\n\nCOMMAND.10: /(?i:show|list|display|get|find|give|select|fetch)\\b/\nPLEASE.10: /(?i:please)\\b/\nME.10: /(?i:me)\\b/\nTHE.10: /(?i:the)\\b/\nALL.10: /(?i:all)\\b/\nFROM.10: /(?i:from)\\b/\nJOIN.10: /(?i:join)\\b/\nON.10: /(?i:on)\\b/\nWHERE.10: /(?i:where|with|whose)\\b/\nAND.10: /(?i:and)\\b/\nOR.10: /(?i:or)\\b/\nOF.10: /(?i:of)\\b/\nIS.10: /(?i:is|are)\\b/\nNOT.10: /(?i:not)\\b/\nEQUAL.10: /(?i:equal)\\b/\nEQUALS.10: /(?i:equals)\\b/\nEXACTLY.10: /(?i:exactly)\\b/\nTO.10: /(?i:to)\\b/\nTHAN.10: /(?i:than)\\b/\nGREATER.10: /(?i:greater)\\b/\nMORE.10: /(?i:more)\\b/\nLESS.10: /(?i:less)\\b/\nABOVE.10: /(?i:above)\\b/\nOVER.10: /(?i:over)\\b/\nBELOW.10: /(?i:below)\\b/\nUNDER.10: /(?i:under)\\b/\nAT.10: /(?i:at)\\b/\nLEAST.10: /(?i:least)\\b/\nMOST.10: /(?i:most)\\b/\nNO.10: /(?i:no)\\b/\nBETWEEN.10: /(?i:between)\\b/\nEQ: \"=\"\nGT: \">\"\nGE: \">=\"\nLT: \"<\"\nLE: \"<=\"\nNE: \"<>\" | \"!=\"\nDOT: \".\"\nCOMMA: \",\"\nSEMICOLON: \";\"\nQUESTION: \"?\"\nEXCLAMATION: \"!\"\n// Keep the owner's word and apostrophe in one token. A standalone apostrophe\n// would compete with a later quoted literal under maximal-munch lexing.\nPOSSESSED.20: /[A-Za-z_][A-Za-z0-9_]*(?:'[sS]\\b|')/\nINT: /[+-]?[0-9]+/\nSTRING: /'(?:[^'\\r\\n]|'')*'/ | /\"(?:[^\"\\\\\\r\\n]|\\\\.)*\"/\nQUALIFIED.20: /[A-Za-z_][A-Za-z0-9_]*\\.[A-Za-z_][A-Za-z0-9_]*/\nWORD: /[A-Za-z_][A-Za-z0-9_]*/\n%import common.WS\n%ignore WS\n",
+        "nl_language_version": 1,
+        "generated_sql": "SELECT student.name, department.dept_name FROM student JOIN department ON student.dept_id = department.id WHERE student.marks > 80;",
+        "nl_lowering": {
+          "tables": [
+            "student",
+            "department"
+          ],
+          "table_source": "catalog inference",
+          "fields": [
+            {
+              "phrase": "student names",
+              "resolved": "student.name",
+              "status": "catalog field",
+              "locator": {
+                "kind": "nl_span",
+                "char_start": 5,
+                "char_end": 18,
+                "line": 1,
+                "col": 6,
+                "end_line": 1,
+                "end_col": 19
+              }
+            },
+            {
+              "phrase": "department names",
+              "resolved": "department.dept_name",
+              "status": "catalog field",
+              "locator": {
+                "kind": "nl_span",
+                "char_start": 23,
+                "char_end": 39,
+                "line": 1,
+                "col": 24,
+                "end_line": 1,
+                "end_col": 40
+              }
+            },
+            {
+              "phrase": "marks",
+              "resolved": "student.marks",
+              "status": "catalog field",
+              "locator": {
+                "kind": "nl_span",
+                "char_start": 46,
+                "char_end": 51,
+                "line": 1,
+                "col": 47,
+                "end_line": 1,
+                "end_col": 52
+              }
+            }
+          ],
+          "join": {
+            "source": "declared relationship",
+            "left": "student.dept_id",
+            "right": "department.id"
+          }
+        }
+      }
+    },
+    {
+      "name": "bind",
+      "status": "ok",
+      "timing_ms": 0.038982,
+      "artifact": {
+        "tables_in_scope": [
+          "department",
+          "student"
+        ],
+        "bound": {
+          "columns": [
+            {
+              "table": "student",
+              "column": "name",
+              "type": "TEXT"
+            },
+            {
+              "table": "department",
+              "column": "dept_name",
+              "type": "TEXT"
+            }
+          ],
+          "from_table": "student",
+          "join": {
+            "table": "department",
+            "left": {
+              "table": "student",
+              "column": "dept_id",
+              "type": "INTEGER"
+            },
+            "right": {
+              "table": "department",
+              "column": "id",
+              "type": "INTEGER"
+            }
+          },
+          "where": [
+            {
+              "column": {
+                "table": "student",
+                "column": "marks",
+                "type": "INTEGER"
+              },
+              "op": ">",
+              "literal_value": 80,
+              "literal_kind": "int",
+              "locator": {
+                "kind": "nl_span",
+                "char_start": 46,
+                "char_end": 56,
+                "line": 1,
+                "col": 47,
+                "end_line": 1,
+                "end_col": 57
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "plan",
+      "status": "ok",
+      "timing_ms": 0.026667,
+      "artifact": {
+        "root": "Project",
+        "plan": {
+          "node_id": 5,
+          "operator": "Project",
+          "label": "name, dept_name",
+          "children": [
+            {
+              "node_id": 4,
+              "operator": "Filter",
+              "label": "student.marks > 80",
+              "children": [
+                {
+                  "node_id": 3,
+                  "operator": "Join",
+                  "label": "student.dept_id = department.id",
+                  "children": [
+                    {
+                      "node_id": 1,
+                      "operator": "Scan",
+                      "label": "student",
+                      "children": [],
+                      "detail": {
+                        "table": "student"
+                      }
+                    },
+                    {
+                      "node_id": 2,
+                      "operator": "Scan",
+                      "label": "department",
+                      "children": [],
+                      "detail": {
+                        "table": "department"
+                      }
+                    }
+                  ],
+                  "detail": {
+                    "on_left": "student.dept_id",
+                    "on_right": "department.id"
+                  }
+                }
+              ],
+              "detail": {
+                "terms": [
+                  "student.marks > 80"
+                ],
+                "term_ids": [
+                  "term#1"
+                ]
+              }
+            }
+          ],
+          "detail": {
+            "columns": [
+              "name",
+              "dept_name"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "optimize",
+      "status": "ok",
+      "timing_ms": 0.153668,
+      "artifact": {
+        "moved_terms": 1,
+        "diff": [
+          {
+            "term_id": "term#1",
+            "term": "student.marks > 80",
+            "target": "left",
+            "from_node_id": 4,
+            "to_node_id": 6
+          }
+        ]
+      }
+    },
+    {
+      "name": "execute",
+      "status": "ok",
+      "timing_ms": 0.134918,
+      "artifact": {
+        "pre_rows": [
+          [
+            "Asha",
+            "CSE"
+          ],
+          [
+            "Meera",
+            "ECE"
+          ]
+        ],
+        "post_rows": [
+          [
+            "Asha",
+            "CSE"
+          ],
+          [
+            "Meera",
+            "ECE"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "verify",
+      "status": "ok",
+      "timing_ms": 0.377478,
+      "artifact": {
+        "sql_sent": "SELECT student.name, department.dept_name FROM student JOIN department ON student.dept_id = department.id WHERE student.marks > 80;",
+        "sqlite_rows": [
+          [
+            "Asha",
+            "CSE"
+          ],
+          [
+            "Meera",
+            "ECE"
+          ]
+        ],
+        "counter_diff": null,
+        "passed": true,
+        "compared": {
+          "pre": true,
+          "post": true
+        }
+      }
+    }
+  ],
+  "plans": {
+    "pre": {
+      "node_id": 5,
+      "operator": "Project",
+      "label": "name, dept_name",
+      "children": [
+        {
+          "node_id": 4,
+          "operator": "Filter",
+          "label": "student.marks > 80",
+          "children": [
+            {
+              "node_id": 3,
+              "operator": "Join",
+              "label": "student.dept_id = department.id",
+              "children": [
+                {
+                  "node_id": 1,
+                  "operator": "Scan",
+                  "label": "student",
+                  "children": [],
+                  "detail": {
+                    "table": "student"
+                  }
+                },
+                {
+                  "node_id": 2,
+                  "operator": "Scan",
+                  "label": "department",
+                  "children": [],
+                  "detail": {
+                    "table": "department"
+                  }
+                }
+              ],
+              "detail": {
+                "on_left": "student.dept_id",
+                "on_right": "department.id"
+              }
+            }
+          ],
+          "detail": {
+            "terms": [
+              "student.marks > 80"
+            ],
+            "term_ids": [
+              "term#1"
+            ]
+          }
+        }
+      ],
+      "detail": {
+        "columns": [
+          "name",
+          "dept_name"
+        ]
+      }
+    },
+    "post": {
+      "node_id": 5,
+      "operator": "Project",
+      "label": "name, dept_name",
+      "children": [
+        {
+          "node_id": 3,
+          "operator": "Join",
+          "label": "student.dept_id = department.id",
+          "children": [
+            {
+              "node_id": 6,
+              "operator": "Filter",
+              "label": "student.marks > 80",
+              "children": [
+                {
+                  "node_id": 1,
+                  "operator": "Scan",
+                  "label": "student",
+                  "children": [],
+                  "detail": {
+                    "table": "student"
+                  }
+                }
+              ],
+              "detail": {
+                "terms": [
+                  "student.marks > 80"
+                ],
+                "term_ids": [
+                  "term#1"
+                ]
+              }
+            },
+            {
+              "node_id": 2,
+              "operator": "Scan",
+              "label": "department",
+              "children": [],
+              "detail": {
+                "table": "department"
+              }
+            }
+          ],
+          "detail": {
+            "on_left": "student.dept_id",
+            "on_right": "department.id"
+          }
+        }
+      ],
+      "detail": {
+        "columns": [
+          "name",
+          "dept_name"
+        ]
+      }
+    }
+  },
+  "plans_ascii": {
+    "pre": "Project(name, dept_name)\n└── Filter(student.marks > 80)\n    └── Join(student.dept_id = department.id)\n        ├── Scan(student)\n        └── Scan(department)",
+    "post": "Project(name, dept_name)\n└── Join(student.dept_id = department.id)\n    ├── Filter(student.marks > 80)\n    │   └── Scan(student)\n    └── Scan(department)"
+  },
+  "plan_diff": [
+    {
+      "term_id": "term#1",
+      "term": "student.marks > 80",
+      "target": "left",
+      "from_node_id": 4,
+      "to_node_id": 6
+    }
+  ],
+  "node_stats": {
+    "pre": [
+      {
+        "node_id": 1,
+        "operator": "Scan",
+        "label": "student",
+        "rows_in": null,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 4,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 12889
+      },
+      {
+        "node_id": 2,
+        "operator": "Scan",
+        "label": "department",
+        "rows_in": null,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 3,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 6337
+      },
+      {
+        "node_id": 3,
+        "operator": "Join",
+        "label": "student.dept_id = department.id",
+        "rows_in": 7,
+        "left_in": 4,
+        "right_in": 3,
+        "rows_out": 4,
+        "join_pairs_tried": 12,
+        "join_pairs_matched": 4,
+        "time_ns": 28315
+      },
+      {
+        "node_id": 4,
+        "operator": "Filter",
+        "label": "student.marks > 80",
+        "rows_in": 4,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 36455
+      },
+      {
+        "node_id": 5,
+        "operator": "Project",
+        "label": "name, dept_name",
+        "rows_in": 2,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 43422
+      }
+    ],
+    "post": [
+      {
+        "node_id": 1,
+        "operator": "Scan",
+        "label": "student",
+        "rows_in": null,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 4,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 6879
+      },
+      {
+        "node_id": 2,
+        "operator": "Scan",
+        "label": "department",
+        "rows_in": null,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 3,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 3783
+      },
+      {
+        "node_id": 3,
+        "operator": "Join",
+        "label": "student.dept_id = department.id",
+        "rows_in": 5,
+        "left_in": 2,
+        "right_in": 3,
+        "rows_out": 2,
+        "join_pairs_tried": 6,
+        "join_pairs_matched": 2,
+        "time_ns": 18889
+      },
+      {
+        "node_id": 5,
+        "operator": "Project",
+        "label": "name, dept_name",
+        "rows_in": 2,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 22482
+      },
+      {
+        "node_id": 6,
+        "operator": "Filter",
+        "label": "student.marks > 80",
+        "rows_in": 4,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 9892
+      }
+    ]
+  },
+  "rows": {
+    "columns": [
+      "name",
+      "dept_name"
+    ],
+    "rows": [
+      [
+        "Asha",
+        "CSE"
+      ],
+      [
+        "Meera",
+        "ECE"
+      ]
+    ],
+    "count": 2
+  },
+  "metrics": {
+    "join_pairs_tried": {
+      "pre": 12,
+      "post": 6
+    },
+    "join_pairs_matched": {
+      "pre": 4,
+      "post": 2
+    },
+    "left_in": {
+      "pre": 4,
+      "post": 2
+    },
+    "right_in": {
+      "pre": 3,
+      "post": 3
+    },
+    "rows_out": {
+      "pre": 2,
+      "post": 2
+    }
+  },
+  "errors": [],
+  "sqlite_cross_check": {
+    "sql_sent": "SELECT student.name, department.dept_name FROM student JOIN department ON student.dept_id = department.id WHERE student.marks > 80;",
+    "sqlite_rows": [
+      [
+        "Asha",
+        "CSE"
+      ],
+      [
+        "Meera",
+        "ECE"
+      ]
+    ],
+    "counter_diff": null,
+    "passed": true,
+    "compared": {
+      "pre": true,
+      "post": true
+    }
+  },
+  "provenance": {
+    "backend": "fixtures",
+    "engine_commit": null,
+    "fixture_set": "default-v1",
+    "protocol": null
+  }
+}

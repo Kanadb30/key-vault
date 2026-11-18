@@ -1,0 +1,100 @@
+start: PLEASE? command ME? projection source_clause? where_clause? ending?
+command: COMMAND
+projection: ALL? field ((COMMA AND? | AND) field)*
+
+?field: THE? phrase                     -> plain_field
+      | THE? QUALIFIED                  -> qualified_field
+      | THE? phrase OF THE? phrase      -> of_field
+      | THE? POSSESSED phrase           -> possessive_field
+phrase: WORD+
+table: phrase
+source_clause: FROM THE? table ((AND | JOIN) THE? table on_clause?)?
+on_clause: ON field equality field
+equality: EQ | EQUAL TO? | EQUALS TO?
+
+where_clause: WHERE comparison (AND comparison)*
+?comparison: field operator literal          -> op_comparison
+           | field IS operator literal       -> copula_comparison
+           | field IS literal                -> is_comparison
+           | field BETWEEN literal AND literal -> between_comparison
+           | field IS BETWEEN literal AND literal -> between_comparison
+operator: GT                              -> gt
+        | GREATER THAN                    -> gt
+        | MORE THAN                       -> gt
+        | ABOVE                           -> gt
+        | OVER                            -> gt
+        | GE                              -> ge
+        | AT LEAST                        -> ge
+        | NO LESS THAN                    -> ge
+        | GREATER THAN OR EQUAL TO?        -> ge
+        | MORE THAN OR EQUAL TO?           -> ge
+        | LT                              -> lt
+        | LESS THAN                       -> lt
+        | BELOW                           -> lt
+        | UNDER                           -> lt
+        | LE                              -> le
+        | AT MOST                         -> le
+        | NO MORE THAN                    -> le
+        | LESS THAN OR EQUAL TO?           -> le
+        | EQ                              -> eq
+        | EQUAL TO?                       -> eq
+        | EQUALS TO?                      -> eq
+        | EXACTLY                         -> eq
+        | NE                              -> ne
+        | NOT EQUAL TO?                   -> ne
+        | NOT EQUALS TO?                  -> ne
+        | NOT                             -> ne
+literal: INT | STRING
+ending: DOT | SEMICOLON | QUESTION | EXCLAMATION
+
+COMMAND.10: /(?i:show|list|display|get|find|give|select|fetch)\b/
+PLEASE.10: /(?i:please)\b/
+ME.10: /(?i:me)\b/
+THE.10: /(?i:the)\b/
+ALL.10: /(?i:all)\b/
+FROM.10: /(?i:from)\b/
+JOIN.10: /(?i:join)\b/
+ON.10: /(?i:on)\b/
+WHERE.10: /(?i:where|with|whose)\b/
+AND.10: /(?i:and)\b/
+OR.10: /(?i:or)\b/
+OF.10: /(?i:of)\b/
+IS.10: /(?i:is|are)\b/
+NOT.10: /(?i:not)\b/
+EQUAL.10: /(?i:equal)\b/
+EQUALS.10: /(?i:equals)\b/
+EXACTLY.10: /(?i:exactly)\b/
+TO.10: /(?i:to)\b/
+THAN.10: /(?i:than)\b/
+GREATER.10: /(?i:greater)\b/
+MORE.10: /(?i:more)\b/
+LESS.10: /(?i:less)\b/
+ABOVE.10: /(?i:above)\b/
+OVER.10: /(?i:over)\b/
+BELOW.10: /(?i:below)\b/
+UNDER.10: /(?i:under)\b/
+AT.10: /(?i:at)\b/
+LEAST.10: /(?i:least)\b/
+MOST.10: /(?i:most)\b/
+NO.10: /(?i:no)\b/
+BETWEEN.10: /(?i:between)\b/
+EQ: "="
+GT: ">"
+GE: ">="
+LT: "<"
+LE: "<="
+NE: "<>" | "!="
+DOT: "."
+COMMA: ","
+SEMICOLON: ";"
+QUESTION: "?"
+EXCLAMATION: "!"
+// Keep the owner's word and apostrophe in one token. A standalone apostrophe
+// would compete with a later quoted literal under maximal-munch lexing.
+POSSESSED.20: /[A-Za-z_][A-Za-z0-9_]*(?:'[sS]\b|')/
+INT: /[+-]?[0-9]+/
+STRING: /'(?:[^'\r\n]|'')*'/ | /"(?:[^"\\\r\n]|\\.)*"/
+QUALIFIED.20: /[A-Za-z_][A-Za-z0-9_]*\.[A-Za-z_][A-Za-z0-9_]*/
+WORD: /[A-Za-z_][A-Za-z0-9_]*/
+%import common.WS
+%ignore WS

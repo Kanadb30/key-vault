@@ -1,0 +1,19 @@
+start: "SELECT"i select_list "FROM"i table_ref join_clause? where_clause? ";"?
+
+select_list: column_ref ("," column_ref)*
+table_ref: IDENT
+join_clause: "JOIN"i table_ref "ON"i column_ref EQ column_ref
+where_clause: "WHERE"i comparison ("AND"i comparison)*
+
+comparison: column_ref (EQ | COMP_OP) literal
+column_ref: IDENT ("." IDENT)?
+literal: INT | STRING
+
+IDENT: /(?!(?i:select|from|join|on|where|and)\b)[A-Za-z_][A-Za-z0-9_]*/
+INT: /[+-]?[0-9]+/
+STRING: /'(?:[^'\r\n]|'')*'/
+EQ: "="
+COMP_OP: /<=|>=|<>|<|>/
+
+%import common.WS
+%ignore WS
