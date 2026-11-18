@@ -1,0 +1,35 @@
+{
+  "plans_ascii": {
+    "pre": "Project(name, dept_name)\n└── Filter(student.marks > 80)\n    └── Join(student.dept_id = department.id)\n        ├── Scan(student)\n        └── Scan(department)",
+    "post": "Project(name, dept_name)\n└── Join(student.dept_id = department.id)\n    ├── Filter(student.marks > 80)\n    │   └── Scan(student)\n    └── Scan(department)"
+  },
+  "plan_diff": [
+    {
+      "term_id": "term#1",
+      "term": "student.marks > 80",
+      "target": "left",
+      "from_node_id": 4,
+      "to_node_id": 6
+    }
+  ],
+  "rows": {
+    "columns": ["name", "dept_name"],
+    "rows": [["Asha", "CSE"], ["Meera", "ECE"]],
+    "count": 2
+  },
+  "metrics": {
+    "join_pairs_tried": {"pre": 12, "post": 6},
+    "join_pairs_matched": {"pre": 4, "post": 2},
+    "left_in": {"pre": 4, "post": 2},
+    "right_in": {"pre": 3, "post": 3},
+    "rows_out": {"pre": 2, "post": 2}
+  },
+  "sqlite_cross_check": {
+    "sql_sent": "SELECT student.name, department.dept_name FROM student JOIN department ON student.dept_id = department.id WHERE student.marks > 80;",
+    "sqlite_rows": [["Asha", "CSE"], ["Meera", "ECE"]],
+    "counter_diff": null,
+    "passed": true,
+    "compared": {"pre": true, "post": true}
+  },
+  "errors": []
+}

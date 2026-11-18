@@ -1,0 +1,638 @@
+{
+  "run_schema_version": 1,
+  "compiler_version": "0.1.0",
+  "inputs": {
+    "frontend_id": "builder",
+    "verbatim": "{\n  \"table\": \"student\",\n  \"columns\": [\n    \"student.name\",\n    \"department.dept_name\"\n  ],\n  \"join\": {\n    \"table\": \"department\",\n    \"left\": \"student.dept_id\",\n    \"right\": \"department.id\"\n  },\n  \"filters\": [\n    {\n      \"column\": \"student.marks\",\n      \"op\": \">\",\n      \"value\": 80\n    }\n  ]\n}",
+    "normalized": "SELECT student.name, department.dept_name FROM student JOIN department ON student.dept_id = department.id WHERE student.marks > 80;",
+    "generated_sql": "SELECT student.name, department.dept_name FROM student JOIN department ON student.dept_id = department.id WHERE student.marks > 80;"
+  },
+  "stages": [
+    {
+      "name": "lex",
+      "status": "skipped",
+      "timing_ms": 0.0,
+      "artifact": {
+        "reason": "Frontend conversion is recorded in the parse stage"
+      }
+    },
+    {
+      "name": "parse",
+      "status": "ok",
+      "timing_ms": 9.039149,
+      "artifact": {
+        "ast": "Select\n├── columns: [student.name, department.dept_name]\n├── from: student\n├── join: department ON student.dept_id = department.id\n└── where: [Compare(student.marks, \">\", 80)]",
+        "tree": {
+          "columns": [
+            {
+              "qualifier": "student",
+              "name": "name",
+              "locator": {
+                "kind": "builder_node",
+                "node_id": "columns"
+              }
+            },
+            {
+              "qualifier": "department",
+              "name": "dept_name",
+              "locator": {
+                "kind": "builder_node",
+                "node_id": "columns"
+              }
+            }
+          ],
+          "from_table": {
+            "name": "student",
+            "locator": {
+              "kind": "builder_node",
+              "node_id": "table"
+            }
+          },
+          "join": {
+            "table": "department",
+            "table_locator": {
+              "kind": "builder_node",
+              "node_id": "join"
+            },
+            "on_left": {
+              "qualifier": "student",
+              "name": "dept_id",
+              "locator": {
+                "kind": "builder_node",
+                "node_id": "join"
+              }
+            },
+            "on_right": {
+              "qualifier": "department",
+              "name": "id",
+              "locator": {
+                "kind": "builder_node",
+                "node_id": "join"
+              }
+            },
+            "locator": {
+              "kind": "builder_node",
+              "node_id": "join"
+            }
+          },
+          "where": [
+            {
+              "column": {
+                "qualifier": "student",
+                "name": "marks",
+                "locator": {
+                  "kind": "builder_node",
+                  "node_id": "filters[0]"
+                }
+              },
+              "op": ">",
+              "literal": {
+                "value": 80,
+                "locator": {
+                  "kind": "builder_node",
+                  "node_id": "filters[0]"
+                }
+              },
+              "locator": {
+                "kind": "builder_node",
+                "node_id": "filters[0]"
+              }
+            }
+          ],
+          "locator": {
+            "kind": "builder_node",
+            "node_id": "query"
+          }
+        },
+        "generated_sql": "SELECT student.name, department.dept_name FROM student JOIN department ON student.dept_id = department.id WHERE student.marks > 80;",
+        "builder": {
+          "table": "student",
+          "columns": [
+            "student.name",
+            "department.dept_name"
+          ],
+          "join": {
+            "table": "department",
+            "left": "student.dept_id",
+            "right": "department.id"
+          },
+          "filters": [
+            {
+              "column": "student.marks",
+              "op": ">",
+              "value": 80
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "bind",
+      "status": "ok",
+      "timing_ms": 0.053295,
+      "artifact": {
+        "tables_in_scope": [
+          "department",
+          "student"
+        ],
+        "bound": {
+          "columns": [
+            {
+              "table": "student",
+              "column": "name",
+              "type": "TEXT"
+            },
+            {
+              "table": "department",
+              "column": "dept_name",
+              "type": "TEXT"
+            }
+          ],
+          "from_table": "student",
+          "join": {
+            "table": "department",
+            "left": {
+              "table": "student",
+              "column": "dept_id",
+              "type": "INTEGER"
+            },
+            "right": {
+              "table": "department",
+              "column": "id",
+              "type": "INTEGER"
+            }
+          },
+          "where": [
+            {
+              "column": {
+                "table": "student",
+                "column": "marks",
+                "type": "INTEGER"
+              },
+              "op": ">",
+              "literal_value": 80,
+              "literal_kind": "int",
+              "locator": {
+                "kind": "builder_node",
+                "node_id": "filters[0]"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "plan",
+      "status": "ok",
+      "timing_ms": 0.035541,
+      "artifact": {
+        "root": "Project",
+        "plan": {
+          "node_id": 5,
+          "operator": "Project",
+          "label": "name, dept_name",
+          "children": [
+            {
+              "node_id": 4,
+              "operator": "Filter",
+              "label": "student.marks > 80",
+              "children": [
+                {
+                  "node_id": 3,
+                  "operator": "Join",
+                  "label": "student.dept_id = department.id",
+                  "children": [
+                    {
+                      "node_id": 1,
+                      "operator": "Scan",
+                      "label": "student",
+                      "children": [],
+                      "detail": {
+                        "table": "student"
+                      }
+                    },
+                    {
+                      "node_id": 2,
+                      "operator": "Scan",
+                      "label": "department",
+                      "children": [],
+                      "detail": {
+                        "table": "department"
+                      }
+                    }
+                  ],
+                  "detail": {
+                    "on_left": "student.dept_id",
+                    "on_right": "department.id"
+                  }
+                }
+              ],
+              "detail": {
+                "terms": [
+                  "student.marks > 80"
+                ],
+                "term_ids": [
+                  "term#1"
+                ]
+              }
+            }
+          ],
+          "detail": {
+            "columns": [
+              "name",
+              "dept_name"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "optimize",
+      "status": "ok",
+      "timing_ms": 0.151108,
+      "artifact": {
+        "moved_terms": 1,
+        "diff": [
+          {
+            "term_id": "term#1",
+            "term": "student.marks > 80",
+            "target": "left",
+            "from_node_id": 4,
+            "to_node_id": 6
+          }
+        ]
+      }
+    },
+    {
+      "name": "execute",
+      "status": "ok",
+      "timing_ms": 0.101351,
+      "artifact": {
+        "pre_rows": [
+          [
+            "Asha",
+            "CSE"
+          ],
+          [
+            "Meera",
+            "ECE"
+          ]
+        ],
+        "post_rows": [
+          [
+            "Asha",
+            "CSE"
+          ],
+          [
+            "Meera",
+            "ECE"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "verify",
+      "status": "ok",
+      "timing_ms": 0.288675,
+      "artifact": {
+        "sql_sent": "SELECT student.name, department.dept_name FROM student JOIN department ON student.dept_id = department.id WHERE student.marks > 80;",
+        "sqlite_rows": [
+          [
+            "Asha",
+            "CSE"
+          ],
+          [
+            "Meera",
+            "ECE"
+          ]
+        ],
+        "counter_diff": null,
+        "passed": true,
+        "compared": {
+          "pre": true,
+          "post": true
+        }
+      }
+    }
+  ],
+  "plans": {
+    "pre": {
+      "node_id": 5,
+      "operator": "Project",
+      "label": "name, dept_name",
+      "children": [
+        {
+          "node_id": 4,
+          "operator": "Filter",
+          "label": "student.marks > 80",
+          "children": [
+            {
+              "node_id": 3,
+              "operator": "Join",
+              "label": "student.dept_id = department.id",
+              "children": [
+                {
+                  "node_id": 1,
+                  "operator": "Scan",
+                  "label": "student",
+                  "children": [],
+                  "detail": {
+                    "table": "student"
+                  }
+                },
+                {
+                  "node_id": 2,
+                  "operator": "Scan",
+                  "label": "department",
+                  "children": [],
+                  "detail": {
+                    "table": "department"
+                  }
+                }
+              ],
+              "detail": {
+                "on_left": "student.dept_id",
+                "on_right": "department.id"
+              }
+            }
+          ],
+          "detail": {
+            "terms": [
+              "student.marks > 80"
+            ],
+            "term_ids": [
+              "term#1"
+            ]
+          }
+        }
+      ],
+      "detail": {
+        "columns": [
+          "name",
+          "dept_name"
+        ]
+      }
+    },
+    "post": {
+      "node_id": 5,
+      "operator": "Project",
+      "label": "name, dept_name",
+      "children": [
+        {
+          "node_id": 3,
+          "operator": "Join",
+          "label": "student.dept_id = department.id",
+          "children": [
+            {
+              "node_id": 6,
+              "operator": "Filter",
+              "label": "student.marks > 80",
+              "children": [
+                {
+                  "node_id": 1,
+                  "operator": "Scan",
+                  "label": "student",
+                  "children": [],
+                  "detail": {
+                    "table": "student"
+                  }
+                }
+              ],
+              "detail": {
+                "terms": [
+                  "student.marks > 80"
+                ],
+                "term_ids": [
+                  "term#1"
+                ]
+              }
+            },
+            {
+              "node_id": 2,
+              "operator": "Scan",
+              "label": "department",
+              "children": [],
+              "detail": {
+                "table": "department"
+              }
+            }
+          ],
+          "detail": {
+            "on_left": "student.dept_id",
+            "on_right": "department.id"
+          }
+        }
+      ],
+      "detail": {
+        "columns": [
+          "name",
+          "dept_name"
+        ]
+      }
+    }
+  },
+  "plans_ascii": {
+    "pre": "Project(name, dept_name)\n└── Filter(student.marks > 80)\n    └── Join(student.dept_id = department.id)\n        ├── Scan(student)\n        └── Scan(department)",
+    "post": "Project(name, dept_name)\n└── Join(student.dept_id = department.id)\n    ├── Filter(student.marks > 80)\n    │   └── Scan(student)\n    └── Scan(department)"
+  },
+  "plan_diff": [
+    {
+      "term_id": "term#1",
+      "term": "student.marks > 80",
+      "target": "left",
+      "from_node_id": 4,
+      "to_node_id": 6
+    }
+  ],
+  "node_stats": {
+    "pre": [
+      {
+        "node_id": 1,
+        "operator": "Scan",
+        "label": "student",
+        "rows_in": null,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 4,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 10268
+      },
+      {
+        "node_id": 2,
+        "operator": "Scan",
+        "label": "department",
+        "rows_in": null,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 3,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 4936
+      },
+      {
+        "node_id": 3,
+        "operator": "Join",
+        "label": "student.dept_id = department.id",
+        "rows_in": 7,
+        "left_in": 4,
+        "right_in": 3,
+        "rows_out": 4,
+        "join_pairs_tried": 12,
+        "join_pairs_matched": 4,
+        "time_ns": 22571
+      },
+      {
+        "node_id": 4,
+        "operator": "Filter",
+        "label": "student.marks > 80",
+        "rows_in": 4,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 27612
+      },
+      {
+        "node_id": 5,
+        "operator": "Project",
+        "label": "name, dept_name",
+        "rows_in": 2,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 32662
+      }
+    ],
+    "post": [
+      {
+        "node_id": 1,
+        "operator": "Scan",
+        "label": "student",
+        "rows_in": null,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 4,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 6002
+      },
+      {
+        "node_id": 2,
+        "operator": "Scan",
+        "label": "department",
+        "rows_in": null,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 3,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 3751
+      },
+      {
+        "node_id": 3,
+        "operator": "Join",
+        "label": "student.dept_id = department.id",
+        "rows_in": 5,
+        "left_in": 2,
+        "right_in": 3,
+        "rows_out": 2,
+        "join_pairs_tried": 6,
+        "join_pairs_matched": 2,
+        "time_ns": 16436
+      },
+      {
+        "node_id": 5,
+        "operator": "Project",
+        "label": "name, dept_name",
+        "rows_in": 2,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 19387
+      },
+      {
+        "node_id": 6,
+        "operator": "Filter",
+        "label": "student.marks > 80",
+        "rows_in": 4,
+        "left_in": null,
+        "right_in": null,
+        "rows_out": 2,
+        "join_pairs_tried": 0,
+        "join_pairs_matched": 0,
+        "time_ns": 8632
+      }
+    ]
+  },
+  "rows": {
+    "columns": [
+      "name",
+      "dept_name"
+    ],
+    "rows": [
+      [
+        "Asha",
+        "CSE"
+      ],
+      [
+        "Meera",
+        "ECE"
+      ]
+    ],
+    "count": 2
+  },
+  "metrics": {
+    "join_pairs_tried": {
+      "pre": 12,
+      "post": 6
+    },
+    "join_pairs_matched": {
+      "pre": 4,
+      "post": 2
+    },
+    "left_in": {
+      "pre": 4,
+      "post": 2
+    },
+    "right_in": {
+      "pre": 3,
+      "post": 3
+    },
+    "rows_out": {
+      "pre": 2,
+      "post": 2
+    }
+  },
+  "errors": [],
+  "sqlite_cross_check": {
+    "sql_sent": "SELECT student.name, department.dept_name FROM student JOIN department ON student.dept_id = department.id WHERE student.marks > 80;",
+    "sqlite_rows": [
+      [
+        "Asha",
+        "CSE"
+      ],
+      [
+        "Meera",
+        "ECE"
+      ]
+    ],
+    "counter_diff": null,
+    "passed": true,
+    "compared": {
+      "pre": true,
+      "post": true
+    }
+  },
+  "provenance": {
+    "backend": "fixtures",
+    "engine_commit": null,
+    "fixture_set": "default-v1",
+    "protocol": null
+  }
+}

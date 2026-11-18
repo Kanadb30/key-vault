@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-15T07:50:25Z",
+  "title": "Design System: SQL Compiler Query Workbench",
+  "extensions": {
+    "colorMeta": {
+      "nav": {"role": "neutral", "displayName": "Navigation navy", "tonalRamp": ["oklch(15% 0.0381 242.3)", "oklch(26% 0.0381 242.3)", "oklch(38% 0.0381 242.3)", "oklch(49% 0.0381 242.3)", "oklch(61% 0.0381 242.3)", "oklch(72% 0.0381 242.3)", "oklch(84% 0.0381 242.3)", "oklch(95% 0.0381 242.3)"]},
+      "surface": {"role": "neutral", "displayName": "Working white", "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(61% 0 0)", "oklch(72% 0 0)", "oklch(84% 0 0)", "oklch(95% 0 0)"]},
+      "text": {"role": "neutral", "displayName": "Content ink", "tonalRamp": ["oklch(15% 0.0355 241.4)", "oklch(26% 0.0355 241.4)", "oklch(38% 0.0355 241.4)", "oklch(49% 0.0355 241.4)", "oklch(61% 0.0355 241.4)", "oklch(72% 0.0355 241.4)", "oklch(84% 0.0355 241.4)", "oklch(95% 0.0355 241.4)"]},
+      "muted": {"role": "neutral", "displayName": "Supporting slate", "tonalRamp": ["oklch(15% 0.0301 239.6)", "oklch(26% 0.0301 239.6)", "oklch(38% 0.0301 239.6)", "oklch(49% 0.0301 239.6)", "oklch(61% 0.0301 239.6)", "oklch(72% 0.0301 239.6)", "oklch(84% 0.0301 239.6)", "oklch(95% 0.0301 239.6)"]},
+      "rule": {"role": "neutral", "displayName": "Cool-gray divider", "tonalRamp": ["oklch(15% 0.0127 236.6)", "oklch(26% 0.0127 236.6)", "oklch(38% 0.0127 236.6)", "oklch(49% 0.0127 236.6)", "oklch(61% 0.0127 236.6)", "oklch(72% 0.0127 236.6)", "oklch(84% 0.0127 236.6)", "oklch(95% 0.0127 236.6)"]},
+      "accent": {"role": "primary", "displayName": "Action teal", "tonalRamp": ["oklch(15% 0.0847 211.3)", "oklch(26% 0.0847 211.3)", "oklch(38% 0.0847 211.3)", "oklch(49% 0.0847 211.3)", "oklch(61% 0.0847 211.3)", "oklch(72% 0.0847 211.3)", "oklch(84% 0.0847 211.3)", "oklch(95% 0.0847 211.3)"]},
+      "accent-light": {"role": "primary", "displayName": "Optimized-plan tint", "tonalRamp": ["oklch(15% 0.0128 202.9)", "oklch(26% 0.0128 202.9)", "oklch(38% 0.0128 202.9)", "oklch(49% 0.0128 202.9)", "oklch(61% 0.0128 202.9)", "oklch(72% 0.0128 202.9)", "oklch(84% 0.0128 202.9)", "oklch(95% 0.0128 202.9)"]},
+      "success": {"role": "status", "displayName": "Verified green", "tonalRamp": ["oklch(15% 0.0853 158.8)", "oklch(26% 0.0853 158.8)", "oklch(38% 0.0853 158.8)", "oklch(49% 0.0853 158.8)", "oklch(61% 0.0853 158.8)", "oklch(72% 0.0853 158.8)", "oklch(84% 0.0853 158.8)", "oklch(95% 0.0853 158.8)"]},
+      "failure": {"role": "status", "displayName": "Failure red", "tonalRamp": ["oklch(15% 0.1556 21.0)", "oklch(26% 0.1556 21.0)", "oklch(38% 0.1556 21.0)", "oklch(49% 0.1556 21.0)", "oklch(61% 0.1556 21.0)", "oklch(72% 0.1556 21.0)", "oklch(84% 0.1556 21.0)", "oklch(95% 0.1556 21.0)"]},
+      "workspace": {"role": "neutral", "displayName": "Workspace gray", "tonalRamp": ["oklch(15% 0.0042 236.5)", "oklch(26% 0.0042 236.5)", "oklch(38% 0.0042 236.5)", "oklch(49% 0.0042 236.5)", "oklch(61% 0.0042 236.5)", "oklch(72% 0.0042 236.5)", "oklch(84% 0.0042 236.5)", "oklch(95% 0.0042 236.5)"]},
+      "control-rule": {"role": "neutral", "displayName": "Control outline", "tonalRamp": ["oklch(15% 0.0172 236.7)", "oklch(26% 0.0172 236.7)", "oklch(38% 0.0172 236.7)", "oklch(49% 0.0172 236.7)", "oklch(61% 0.0172 236.7)", "oklch(72% 0.0172 236.7)", "oklch(84% 0.0172 236.7)", "oklch(95% 0.0172 236.7)"]},
+      "accent-hover": {"role": "primary", "displayName": "Action teal hover", "tonalRamp": ["oklch(15% 0.0730 213.5)", "oklch(26% 0.0730 213.5)", "oklch(38% 0.0730 213.5)", "oklch(49% 0.0730 213.5)", "oklch(61% 0.0730 213.5)", "oklch(72% 0.0730 213.5)", "oklch(84% 0.0730 213.5)", "oklch(95% 0.0730 213.5)"]},
+      "focus": {"role": "interaction", "displayName": "Keyboard focus teal", "tonalRamp": ["oklch(15% 0.0959 215.9)", "oklch(26% 0.0959 215.9)", "oklch(38% 0.0959 215.9)", "oklch(49% 0.0959 215.9)", "oklch(61% 0.0959 215.9)", "oklch(72% 0.0959 215.9)", "oklch(84% 0.0959 215.9)", "oklch(95% 0.0959 215.9)"]},
+      "code-surface": {"role": "neutral", "displayName": "Code evidence backing", "tonalRamp": ["oklch(15% 0.0042 236.5)", "oklch(26% 0.0042 236.5)", "oklch(38% 0.0042 236.5)", "oklch(49% 0.0042 236.5)", "oklch(61% 0.0042 236.5)", "oklch(72% 0.0042 236.5)", "oklch(84% 0.0042 236.5)", "oklch(95% 0.0042 236.5)"]}
+    },
+    "typographyMeta": {
+      "title": {"displayName": "Workbench title", "purpose": "Main interface heading; no separate display face."},
+      "body": {"displayName": "Interface body", "purpose": "Common explanatory copy; smaller annotations are contextual metadata."},
+      "editor": {"displayName": "SQL source", "purpose": "Whitespace-preserving source entry with aligned line numbers."},
+      "plan": {"displayName": "Desktop plan", "purpose": "Before/after relational plans with generous line spacing."},
+      "plan-mobile": {"displayName": "Mobile plan", "purpose": "Stacked plans; scroll rather than shrinking further."}
+    },
+    "shadows": [],
+    "motion": [
+      {"name": "button-state", "value": "background-color 150ms, border-color 150ms", "purpose": "Color-only button feedback; no movement or lift."},
+      {"name": "reduced-motion", "value": "transition: none !important; scroll-behavior: auto !important", "purpose": "Applied to all elements and pseudo-elements under prefers-reduced-motion: reduce."}
+    ],
+    "breakpoints": [
+      {"name": "wide-min", "value": "1600px"},
+      {"name": "compact-desktop-max", "value": "1190px"},
+      {"name": "top-navigation-max", "value": "900px"},
+      {"name": "mobile-max", "value": "620px"}
+    ]
+  },
+  "components": [
+    {
+      "name": "Run query",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary compiler action; disabled while running or when no source is available.",
+      "html": "<button class=\"ds-run\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m8 4 13 8-13 8V4Z\"/></svg>Run query</button>",
+      "css": ".ds-run{display:inline-flex;justify-content:center;align-items:center;gap:8px;font:600 .8125rem system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;min-height:40px;min-width:122px;padding:9px 15px;border-radius:4px;border:1px solid var(--accent,#006c7b);background:var(--accent,#006c7b);color:var(--surface,#fff);cursor:pointer;white-space:nowrap;transition:background-color 150ms,border-color 150ms}.ds-run:not(:disabled):hover{background:#005664;border-color:#005664}.ds-run:focus-visible{outline:2px solid #007c92;outline-offset:4px}.ds-run:disabled{opacity:.58;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-run{transition:none!important}}"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Outlined utility action, including connection Retry.",
+      "html": "<button class=\"ds-secondary\">Retry</button>",
+      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 .8125rem system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;min-height:40px;padding:9px 15px;border:1px solid #c5d1d9;border-radius:4px;background:var(--surface,#fff);color:var(--text,#1d303e);white-space:nowrap;cursor:pointer;transition:background-color 150ms,border-color 150ms}.ds-secondary:not(:disabled):hover{border-color:#8297a6;background:#f7f9fa}.ds-secondary:focus-visible{outline:2px solid #007c92;outline-offset:4px}.ds-secondary:disabled{opacity:.58;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none!important}}"
+    },
+    {
+      "name": "Compact bundle action",
+      "kind": "button",
+      "refersTo": "button-secondary-compact",
+      "description": "Compact secondary action used by Load bundle and Export JSON.",
+      "html": "<button class=\"ds-bundle\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5\"/></svg>Export JSON</button>",
+      "css": ".ds-bundle{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 .75rem system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;min-height:36px;padding:8px 11px;border:1px solid #c5d1d9;border-radius:4px;background:var(--surface,#fff);color:var(--text,#1d303e);cursor:pointer;white-space:nowrap;transition:background-color 150ms,border-color 150ms}.ds-bundle:not(:disabled):hover{border-color:#8297a6;background:#f7f9fa}.ds-bundle:focus-visible{outline:2px solid #007c92;outline-offset:4px}.ds-bundle:disabled{opacity:.58;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-bundle{transition:none!important}}"
+    },
+    {
+      "name": "SQL source field",
+      "kind": "input",
+      "refersTo": "input-sql",
+      "description": "Native resizable source field; the console adds a separate line-number gutter.",
+      "html": "<textarea class=\"ds-sql\" aria-label=\"SQL query\" spellcheck=\"false\" autocapitalize=\"off\" autocomplete=\"off\">SELECT name\nFROM student\nWHERE marks > 80;</textarea>",
+      "css": ".ds-sql{display:block;box-sizing:border-box;width:100%;min-height:164px;height:164px;max-height:440px;resize:vertical;border:0;border-radius:0;background:#fbfcfd;padding:18px;color:#183b4f;font:.8125rem/1.85 var(--code,\"SFMono-Regular\",Consolas,\"Liberation Mono\",monospace);white-space:pre;overflow:auto}.ds-sql::placeholder{color:var(--muted,#556774)}.ds-sql:focus-visible{outline:2px solid #007c92;outline-offset:-3px}@media(max-width:620px){.ds-sql{font-size:.75rem;padding-inline:10px}}"
+    },
+    {
+      "name": "Query preset",
+      "kind": "input",
+      "refersTo": "select-preset",
+      "description": "Labeled native select used to load example source.",
+      "html": "<label class=\"ds-preset\">Example <select class=\"ds-select\" aria-label=\"Load an example query\"><option selected disabled>Choose a query</option><option>Predicate pushdown</option></select></label>",
+      "css": ".ds-preset{display:flex;align-items:center;gap:8px;font:.75rem system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;color:var(--muted,#556774)}.ds-select{font:inherit;border:1px solid #c5d1d9;color:var(--text,#1d303e);background:var(--surface,#fff);border-radius:4px;padding:7px 25px 7px 9px;max-width:240px;cursor:pointer}.ds-select:focus-visible{outline:2px solid #007c92;outline-offset:4px}.ds-select:disabled{cursor:not-allowed}@media(max-width:620px){.ds-preset{width:100%;justify-content:space-between}.ds-select{flex:1;max-width:260px}}"
+    },
+    {
+      "name": "Frontend navigation",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "Selected SQL and an alternate frontend shown disabled while compilation is busy.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Query frontends\"><button class=\"ds-nav-item ds-nav-selected\" aria-current=\"page\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m8 7-5 5 5 5m8-10 5 5-5 5m-3-13-2 20\"/></svg><span>SQL</span></button><button class=\"ds-nav-item\" disabled aria-label=\"Visual builder (compiler busy)\"><span>Visual builder</span></button></nav>",
+      "css": ".ds-nav{display:grid;gap:5px;background:var(--nav,#172b3a);padding:16px;font-family:system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif}.ds-nav-item{display:flex;align-items:center;gap:10px;background:transparent;border:1px solid transparent;color:#c3d1db;border-radius:4px;padding:11px 10px;text-align:left;font:inherit;font-size:.8125rem;width:100%;cursor:pointer}.ds-nav-selected{color:var(--surface,#fff);background:#294455;border-color:#466172}.ds-nav-item:not(:disabled):hover{background:#335367}.ds-nav-item:focus-visible{outline:2px solid #87d5df;outline-offset:4px}.ds-nav-item:disabled{opacity:1;color:#a7b9c6;cursor:not-allowed}.ds-nav-item small{font-size:.625rem;margin-left:auto;border:1px solid #5c707d;border-radius:3px;padding:2px 3px}@media(max-width:900px){.ds-nav{display:flex;justify-content:flex-end}.ds-nav-item{width:auto;padding:8px;font-size:.75rem}.ds-nav-item>svg,.ds-nav-item small{display:none}}@media(max-width:620px){.ds-nav{justify-content:flex-start;flex-wrap:wrap}.ds-nav-item{padding:7px 9px}}"
+    },
+    {
+      "name": "Plan tags",
+      "kind": "chip",
+      "refersTo": "plan-tag",
+      "description": "Passive Original and Optimized labels, not interactive filters.",
+      "html": "<span class=\"ds-tag\">Original</span> <span class=\"ds-tag ds-tag-optimized\">Optimized</span>",
+      "css": ".ds-tag{display:inline-block;border:1px solid #d5e0e7;background:#f5f8fa;color:#546a78;border-radius:3px;padding:3px 6px;font:.5625rem system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif}.ds-tag-optimized{color:#00636f;border-color:#bad9dd;background:var(--accent-light,#e8f4f5)}"
+    },
+    {
+      "name": "Result panel",
+      "kind": "card",
+      "refersTo": "result-panel",
+      "description": "Bordered working container with header, scrollable rows, and no elevation.",
+      "html": "<section class=\"ds-result\"><div class=\"ds-result-heading\"><h2>Result rows</h2><span>2 rows</span></div><div class=\"ds-table-scroll\" tabindex=\"0\" aria-label=\"Result rows\"><table class=\"ds-table\"><thead><tr><th scope=\"col\">name</th><th scope=\"col\">dept_name</th></tr></thead><tbody><tr><td>Asha</td><td>CSE</td></tr><tr><td>Meera</td><td>ECE</td></tr></tbody></table></div></section>",
+      "css": ".ds-result{background:var(--surface,#fff);border:1px solid var(--rule,#d8e1e7);border-radius:5px;min-width:0;overflow:hidden;color:var(--text,#1d303e);font-family:system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif}.ds-result-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--rule,#d8e1e7);padding:14px 17px}.ds-result-heading h2{margin:0;font-size:.9375rem;font-weight:650}.ds-result-heading>span{font-size:.6875rem;color:var(--muted,#556774)}.ds-table-scroll{min-width:0;overflow:auto;outline-offset:4px}.ds-table-scroll:focus-visible{outline:2px solid #007c92}.ds-table{width:100%;border-collapse:collapse;font-size:.75rem;text-align:left;white-space:nowrap}.ds-table th{font-size:.625rem;color:var(--muted,#556774);background:#f7f9fb;font-weight:550}.ds-table th,.ds-table td{padding:10px 17px;border-bottom:1px solid #e7edf1}.ds-table td{font-variant-numeric:tabular-nums}.ds-table tbody tr:last-child td{border-bottom:0}.ds-table tbody tr:hover{background:#f8fbfc}"
+    },
+    {
+      "name": "Compiler stage control",
+      "kind": "nav",
+      "refersTo": "stage-button",
+      "description": "Selected stage with ordinal, explicit completion status, and recorded timing.",
+      "html": "<button class=\"ds-stage\" aria-pressed=\"true\"><span class=\"ds-stage-number\">05</span><span class=\"ds-stage-label\">Pushdown<small>Complete · 0.16 ms</small></span></button>",
+      "css": ".ds-stage{display:flex;align-items:center;justify-content:center;gap:8px;padding:16px 7px 17px;border:0;border-bottom:2px solid var(--accent,#006c7b);background:#f0f8f9;color:var(--accent,#006c7b);text-align:left;min-width:0;cursor:pointer;font-family:system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif}.ds-stage:hover{background:#f0f8f9}.ds-stage:focus-visible{outline:2px solid #007c92;outline-offset:4px}.ds-stage-number{display:flex;align-items:center;justify-content:center;width:23px;height:23px;flex-shrink:0;border:1px solid #b5c7c0;border-radius:50%;color:var(--success,#226444);font-size:.625rem;font-variant-numeric:tabular-nums}.ds-stage-label{font-size:.75rem;font-weight:600}.ds-stage-label small{display:block;white-space:nowrap;font-size:.5625rem;font-weight:400;margin-top:4px;color:var(--muted,#556774);font-variant-numeric:tabular-nums}@media(max-width:1190px){.ds-stage{flex-direction:column;gap:6px;text-align:center;padding-block:12px}}@media(max-width:620px){.ds-stage{min-width:83px}.ds-stage-label{font-size:.6875rem}}"
+    },
+    {
+      "name": "Before and after plans",
+      "kind": "custom",
+      "refersTo": "plan-pair",
+      "description": "Equal desktop panes stack on smaller screens; moved predicates stay highlighted.",
+      "html": "<div class=\"ds-plan-pair\"><section class=\"ds-plan-pane\"><h3>Before pushdown</h3><pre class=\"ds-plan-code\" tabindex=\"0\" aria-label=\"Original plan\"><span>Project(name, dept_name)</span><span class=\"ds-plan-moved\">└── Filter(student.marks &gt; 80)</span><span>    └── Join(student.dept_id = department.id)</span><span>        ├── Scan(student)</span><span>        └── Scan(department)</span></pre></section><section class=\"ds-plan-pane\"><h3>After pushdown</h3><pre class=\"ds-plan-code\" tabindex=\"0\" aria-label=\"Optimized plan\"><span>Project(name, dept_name)</span><span>└── Join(student.dept_id = department.id)</span><span class=\"ds-plan-moved\">    ├── Filter(student.marks &gt; 80)</span><span>    │   └── Scan(student)</span><span>    └── Scan(department)</span></pre></section></div>",
+      "css": ".ds-plan-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-top:1px solid var(--rule,#d8e1e7);background:var(--surface,#fff);color:var(--text,#1d303e)}.ds-plan-pane{min-width:0}.ds-plan-pane+.ds-plan-pane{border-left:1px solid var(--rule,#d8e1e7)}.ds-plan-pane h3{margin:0;padding:16px 19px 10px;font:600 .75rem system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif}.ds-plan-code{margin:0;min-height:180px;padding:8px 19px 22px;font:.8125rem/1.95 var(--code,\"SFMono-Regular\",Consolas,\"Liberation Mono\",monospace);overflow:auto;tab-size:2;outline-offset:4px}.ds-plan-code>span{display:block;white-space:pre;height:1.95em}.ds-plan-code .ds-plan-moved{color:#005f6e;background:#edf7f7}.ds-plan-code:focus-visible{outline:2px solid #007c92}@media(max-width:900px){.ds-plan-pair{grid-template-columns:minmax(0,1fr)}.ds-plan-pane+.ds-plan-pane{border-left:0;border-top:1px solid var(--rule,#d8e1e7)}.ds-plan-code{min-height:auto}}@media(max-width:620px){.ds-plan-pane h3{padding-inline:13px}.ds-plan-code{padding-inline:13px;font-size:.75rem}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Query workbench",
+    "overview": "A familiar Kibana-style workbench: navy navigation, white working surfaces, cool-gray dividers, and teal actions. The light workspace supports a projector-friendly compiler walkthrough. Density serves inspection rather than dashboard decoration.\n\nThis records the implemented console, not a new identity proposal. The confirmed workbench direction overrides seed `8c05e545`; system sans and code-focused monospace are intentional brief-pinned choices.",
+    "keyCharacteristics": [
+      "Light, bordered working surfaces against navy navigation.",
+      "Compact interface text with spacious, scrollable compiler artifacts.",
+      "Explicit selection, execution status, and evidence provenance."
+    ],
+    "rules": [
+      {"name": "The Visible State Rule", "body": "Pair status color with labels or symbols; retain the selected-stage underline and keyboard focus outline.", "section": "colors"},
+      {"name": "The Plan Readability Rule", "body": "Keep plans at the `plan` role on desktop (13px) and `plan-mobile` role at the mobile breakpoint (12px), with preserved whitespace and horizontal scrolling. Do not shrink code to force it into a pane.", "section": "typography"}
+    ],
+    "dos": [
+      "Do preserve the light workbench, navy navigation, and restrained teal action hierarchy.",
+      "Do retain readable, scrollable plans and the labeled before/after comparison.",
+      "Do expose focus, status labels, and the provenance of displayed evidence.",
+      "Do distinguish the selected storage backend and actual runtime engine availability."
+    ],
+    "donts": [
+      "Don't turn this compiler inspector into a marketing page or an unsupported metrics dashboard.",
+      "Don't use monospace for interface headings or shrink code to avoid overflow.",
+      "Don't hide stale, failed, skipped, or unavailable states behind success styling.",
+      "Don't add decorative shadows, gradients, or display typography absent from this implemented world."
+    ]
+  }
+}

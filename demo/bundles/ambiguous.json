@@ -1,0 +1,370 @@
+{
+  "run_schema_version": 1,
+  "compiler_version": "0.1.0",
+  "inputs": {
+    "frontend_id": "sql",
+    "verbatim": "SELECT id\nFROM student\nJOIN department ON student.dept_id = department.id;",
+    "normalized": "SELECT id FROM student JOIN department ON student . dept_id = department . id ;"
+  },
+  "stages": [
+    {
+      "name": "lex",
+      "status": "ok",
+      "timing_ms": 2.126128,
+      "artifact": {
+        "token_count": 15,
+        "tokens": [
+          {
+            "type": "SELECT",
+            "value": "SELECT",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 0,
+              "char_end": 6,
+              "line": 1,
+              "col": 1,
+              "end_line": 1,
+              "end_col": 7
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "id",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 7,
+              "char_end": 9,
+              "line": 1,
+              "col": 8,
+              "end_line": 1,
+              "end_col": 10
+            }
+          },
+          {
+            "type": "FROM",
+            "value": "FROM",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 10,
+              "char_end": 14,
+              "line": 2,
+              "col": 1,
+              "end_line": 2,
+              "end_col": 5
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "student",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 15,
+              "char_end": 22,
+              "line": 2,
+              "col": 6,
+              "end_line": 2,
+              "end_col": 13
+            }
+          },
+          {
+            "type": "JOIN",
+            "value": "JOIN",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 23,
+              "char_end": 27,
+              "line": 3,
+              "col": 1,
+              "end_line": 3,
+              "end_col": 5
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "department",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 28,
+              "char_end": 38,
+              "line": 3,
+              "col": 6,
+              "end_line": 3,
+              "end_col": 16
+            }
+          },
+          {
+            "type": "ON",
+            "value": "ON",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 39,
+              "char_end": 41,
+              "line": 3,
+              "col": 17,
+              "end_line": 3,
+              "end_col": 19
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "student",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 42,
+              "char_end": 49,
+              "line": 3,
+              "col": 20,
+              "end_line": 3,
+              "end_col": 27
+            }
+          },
+          {
+            "type": "DOT",
+            "value": ".",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 49,
+              "char_end": 50,
+              "line": 3,
+              "col": 27,
+              "end_line": 3,
+              "end_col": 28
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "dept_id",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 50,
+              "char_end": 57,
+              "line": 3,
+              "col": 28,
+              "end_line": 3,
+              "end_col": 35
+            }
+          },
+          {
+            "type": "EQ",
+            "value": "=",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 58,
+              "char_end": 59,
+              "line": 3,
+              "col": 36,
+              "end_line": 3,
+              "end_col": 37
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "department",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 60,
+              "char_end": 70,
+              "line": 3,
+              "col": 38,
+              "end_line": 3,
+              "end_col": 48
+            }
+          },
+          {
+            "type": "DOT",
+            "value": ".",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 70,
+              "char_end": 71,
+              "line": 3,
+              "col": 48,
+              "end_line": 3,
+              "end_col": 49
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "id",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 71,
+              "char_end": 73,
+              "line": 3,
+              "col": 49,
+              "end_line": 3,
+              "end_col": 51
+            }
+          },
+          {
+            "type": "SEMICOLON",
+            "value": ";",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 73,
+              "char_end": 74,
+              "line": 3,
+              "col": 51,
+              "end_line": 3,
+              "end_col": 52
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "parse",
+      "status": "ok",
+      "timing_ms": 0.242831,
+      "artifact": {
+        "ast": "Select\n├── columns: [id]\n├── from: student\n├── join: department ON student.dept_id = department.id\n└── where: []",
+        "tree": {
+          "columns": [
+            {
+              "qualifier": null,
+              "name": "id",
+              "locator": {
+                "kind": "sql_span",
+                "char_start": 7,
+                "char_end": 9,
+                "line": 1,
+                "col": 8,
+                "end_line": 1,
+                "end_col": 10
+              }
+            }
+          ],
+          "from_table": {
+            "name": "student",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 15,
+              "char_end": 22,
+              "line": 2,
+              "col": 6,
+              "end_line": 2,
+              "end_col": 13
+            }
+          },
+          "join": {
+            "table": "department",
+            "table_locator": {
+              "kind": "sql_span",
+              "char_start": 28,
+              "char_end": 38,
+              "line": 3,
+              "col": 6,
+              "end_line": 3,
+              "end_col": 16
+            },
+            "on_left": {
+              "qualifier": "student",
+              "name": "dept_id",
+              "locator": {
+                "kind": "sql_span",
+                "char_start": 42,
+                "char_end": 57,
+                "line": 3,
+                "col": 20,
+                "end_line": 3,
+                "end_col": 35
+              }
+            },
+            "on_right": {
+              "qualifier": "department",
+              "name": "id",
+              "locator": {
+                "kind": "sql_span",
+                "char_start": 60,
+                "char_end": 73,
+                "line": 3,
+                "col": 38,
+                "end_line": 3,
+                "end_col": 51
+              }
+            },
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 23,
+              "char_end": 73,
+              "line": 3,
+              "col": 1,
+              "end_line": 3,
+              "end_col": 51
+            }
+          },
+          "where": [],
+          "locator": {
+            "kind": "sql_span",
+            "char_start": 0,
+            "char_end": 74,
+            "line": 1,
+            "col": 1,
+            "end_line": 3,
+            "end_col": 52
+          }
+        }
+      }
+    },
+    {
+      "name": "bind",
+      "status": "error",
+      "timing_ms": 0.03525,
+      "artifact": {}
+    },
+    {
+      "name": "plan",
+      "status": "skipped",
+      "timing_ms": 0.0,
+      "artifact": {}
+    },
+    {
+      "name": "optimize",
+      "status": "skipped",
+      "timing_ms": 0.0,
+      "artifact": {}
+    },
+    {
+      "name": "execute",
+      "status": "skipped",
+      "timing_ms": 0.0,
+      "artifact": {}
+    },
+    {
+      "name": "verify",
+      "status": "skipped",
+      "timing_ms": 0.0,
+      "artifact": {}
+    }
+  ],
+  "plans": null,
+  "plans_ascii": null,
+  "plan_diff": [],
+  "node_stats": null,
+  "rows": null,
+  "metrics": null,
+  "errors": [
+    {
+      "stage": "bind",
+      "code": "BIND_AMBIGUOUS_COLUMN",
+      "message": "Column reference 'id' is ambiguous: could be 'department.id', 'student.id'",
+      "locator": {
+        "kind": "sql_span",
+        "char_start": 7,
+        "char_end": 9,
+        "line": 1,
+        "col": 8,
+        "end_line": 1,
+        "end_col": 10
+      },
+      "origin": "sql_compiler"
+    }
+  ],
+  "sqlite_cross_check": null,
+  "provenance": {
+    "backend": "fixtures",
+    "engine_commit": null,
+    "fixture_set": "default-v1",
+    "protocol": null
+  }
+}

@@ -1,0 +1,194 @@
+{
+  "run_schema_version": 1,
+  "compiler_version": "0.1.0",
+  "inputs": {
+    "frontend_id": "sql",
+    "verbatim": "SELECT grade FROM student;",
+    "normalized": "SELECT grade FROM student ;"
+  },
+  "stages": [
+    {
+      "name": "lex",
+      "status": "ok",
+      "timing_ms": 2.14507,
+      "artifact": {
+        "token_count": 5,
+        "tokens": [
+          {
+            "type": "SELECT",
+            "value": "SELECT",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 0,
+              "char_end": 6,
+              "line": 1,
+              "col": 1,
+              "end_line": 1,
+              "end_col": 7
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "grade",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 7,
+              "char_end": 12,
+              "line": 1,
+              "col": 8,
+              "end_line": 1,
+              "end_col": 13
+            }
+          },
+          {
+            "type": "FROM",
+            "value": "FROM",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 13,
+              "char_end": 17,
+              "line": 1,
+              "col": 14,
+              "end_line": 1,
+              "end_col": 18
+            }
+          },
+          {
+            "type": "IDENT",
+            "value": "student",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 18,
+              "char_end": 25,
+              "line": 1,
+              "col": 19,
+              "end_line": 1,
+              "end_col": 26
+            }
+          },
+          {
+            "type": "SEMICOLON",
+            "value": ";",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 25,
+              "char_end": 26,
+              "line": 1,
+              "col": 26,
+              "end_line": 1,
+              "end_col": 27
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "parse",
+      "status": "ok",
+      "timing_ms": 0.140595,
+      "artifact": {
+        "ast": "Select\n├── columns: [grade]\n├── from: student\n└── where: []",
+        "tree": {
+          "columns": [
+            {
+              "qualifier": null,
+              "name": "grade",
+              "locator": {
+                "kind": "sql_span",
+                "char_start": 7,
+                "char_end": 12,
+                "line": 1,
+                "col": 8,
+                "end_line": 1,
+                "end_col": 13
+              }
+            }
+          ],
+          "from_table": {
+            "name": "student",
+            "locator": {
+              "kind": "sql_span",
+              "char_start": 18,
+              "char_end": 25,
+              "line": 1,
+              "col": 19,
+              "end_line": 1,
+              "end_col": 26
+            }
+          },
+          "join": null,
+          "where": [],
+          "locator": {
+            "kind": "sql_span",
+            "char_start": 0,
+            "char_end": 26,
+            "line": 1,
+            "col": 1,
+            "end_line": 1,
+            "end_col": 27
+          }
+        }
+      }
+    },
+    {
+      "name": "bind",
+      "status": "error",
+      "timing_ms": 0.02882,
+      "artifact": {}
+    },
+    {
+      "name": "plan",
+      "status": "skipped",
+      "timing_ms": 0.0,
+      "artifact": {}
+    },
+    {
+      "name": "optimize",
+      "status": "skipped",
+      "timing_ms": 0.0,
+      "artifact": {}
+    },
+    {
+      "name": "execute",
+      "status": "skipped",
+      "timing_ms": 0.0,
+      "artifact": {}
+    },
+    {
+      "name": "verify",
+      "status": "skipped",
+      "timing_ms": 0.0,
+      "artifact": {}
+    }
+  ],
+  "plans": null,
+  "plans_ascii": null,
+  "plan_diff": [],
+  "node_stats": null,
+  "rows": null,
+  "metrics": null,
+  "errors": [
+    {
+      "stage": "bind",
+      "code": "BIND_UNKNOWN_COLUMN",
+      "message": "Unknown column 'grade' in table 'student'",
+      "locator": {
+        "kind": "sql_span",
+        "char_start": 7,
+        "char_end": 12,
+        "line": 1,
+        "col": 8,
+        "end_line": 1,
+        "end_col": 13
+      },
+      "origin": "sql_compiler"
+    }
+  ],
+  "sqlite_cross_check": null,
+  "provenance": {
+    "backend": "fixtures",
+    "engine_commit": null,
+    "fixture_set": "default-v1",
+    "protocol": null
+  }
+}
