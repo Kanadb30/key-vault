@@ -1,5 +1,5 @@
 use crate::catalog::{Catalog, TableId, TableMetadata};
-use crate::error::{Result, CustomError};
+use crate::error::{CustomError, Result};
 
 pub struct CatalogManager {
     next_table_id: u32,
@@ -8,18 +8,25 @@ pub struct CatalogManager {
 
 impl CatalogManager {
     pub fn new(next_table_id: u32) -> CatalogManager {
-        CatalogManager { 
+        CatalogManager {
             next_table_id: next_table_id,
-            catalog: Catalog::new() 
+            catalog: Catalog::new(),
         }
     }
 
-    pub fn create_table(&mut self, start_page: u32, table_name: String) -> Result<TableId> {
+    pub fn create_table(
+        &mut self,
+        start_page: u32,
+        table_name: String,
+        columns: Vec<crate::codec::Column>,
+    ) -> Result<TableId> {
         if self.next_table_id == u32::MAX {
-            return Err(CustomError::Err_from_wrong_arg("Maximum number of tables reached".to_string()));
+            return Err(CustomError::Err_from_wrong_arg(
+                "Maximum number of tables reached".to_string(),
+            ));
         }
         let table_id = TableId::new(self.next_table_id);
-        let metadata = TableMetadata::new(table_id, start_page, table_name);
+        let metadata = TableMetadata::new(table_id, start_page, table_name, columns);
         self.catalog.add_table(metadata)?;
         self.next_table_id += 1;
         Ok(table_id)
@@ -29,7 +36,10 @@ impl CatalogManager {
         &self.catalog
     }
 
-    pub fn add_table(&mut self, metadata: TableMetadata) -> Result<()> {
+    /// Recovery-only path: re-adds an existing table with its persisted id
+    /// without advancing `next_table_id`. Not public API — external callers
+    /// must use `create_table`.
+    pub(crate) fn add_table(&mut self, metadata: TableMetadata) -> Result<()> {
         self.catalog.add_table(metadata)
     }
 
@@ -41,4 +51,3 @@ impl CatalogManager {
         self.catalog.get_total_no_of_tables()
     }
 }
-
